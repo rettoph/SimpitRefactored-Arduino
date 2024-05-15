@@ -1,13 +1,9 @@
-//|-------------------|
-//|       Main        |
-//|-------------------|
+#include <Arduino.h>
 
-void setup()
-{
+void setup() {
 
 }
 
-void loop()
-{
-
+void loop() {
+    SERIAL_PORT_MONITOR.print(F("LED: "));
 }
