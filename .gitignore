@@ -1,3 +1,5 @@
 .vscode/c_cpp_properties.json
 .vscode/arduino.json
 src/.vs
+*.o
+*.out

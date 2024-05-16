@@ -1,0 +1,18 @@
+{
+    "arduino.useArduinoCli": true,
+    "makefile.makefilePath": "${workspaceFolder}/tests/Makefile",
+    "makefile.launchConfigurations": [
+        {
+            "cwd": "${workspaceFolder}/tests",
+            "binaryPath": "${workspaceFolder}/tests/tests.out",
+            "binaryArgs": []
+        }
+    ],
+    "makefile.configurations":[
+        {
+            "name": "tests",
+            "makeDirectory": "${workspaceFolder}/tests",
+            "makeArgs": [ "EXTRA_CXXFLAGS=\"-g\"", "CXXFLAGS=\"-g\"", "CFLAGS=\"-g\"" ]
+        }
+    ]
+}

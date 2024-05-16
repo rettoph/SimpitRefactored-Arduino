@@ -24,10 +24,10 @@ protected:
     }
 
 public:
-    void TestData(byte* data, unsigned int length)
+    void TestEncodeDecodeMatchesInput(byte* input, unsigned int length)
     {
         stream->Clear();
-        stream->Write((void*)data, length);
+        stream->Write((void*)input, length);
 
         assertTrue(COBS::TryEncode(*stream));
         assertTrue(COBS::TryDecode(*stream));
@@ -37,7 +37,7 @@ public:
         for(int i = 0; i < length; i++)
         {
             assertTrue(stream->TryReadByte(value));
-            assertEqual(data[i], value);
+            assertEqual(input[i], value);
         }
     }
 };
@@ -45,31 +45,31 @@ public:
 testF(COBSTests, decode_matches_encode_01)
 {
     const unsigned int length = 9;
-    byte *data = new byte[length] { 1, 2, 3, 4, 5, 6, 7, 8, 9 };
+    byte *input = new byte[length] { 1, 2, 3, 4, 5, 6, 7, 8, 9 };
 
-    TestData(data, length);
+    TestEncodeDecodeMatchesInput(input, length);
 }
 
 testF(COBSTests, decode_matches_encode_02)
 {
     const unsigned int length = 8;
-    byte *data = new byte[length] { 0, 1, 0, 1, 0, 1, 0, 1 };
+    byte *input = new byte[length] { 0, 1, 0, 1, 0, 1, 0, 1 };
 
-    TestData(data, length);
+    TestEncodeDecodeMatchesInput(input, length);
 }
 
 testF(COBSTests, decode_matches_encode_03)
 {
     const unsigned int length = 9;
-    byte *data = new byte[length] { 0, 1, 2, 4, 8, 16, 32, 64, 128 };
+    byte *input = new byte[length] { 0, 1, 2, 4, 8, 16, 32, 64, 128 };
 
-    TestData(data, length);
+    TestEncodeDecodeMatchesInput(input, length);
 }
 
 testF(COBSTests, decode_matches_encode_04)
 {
     const unsigned int length = 9;
-    byte *data = new byte[length] { 0, 0, 0, 0, 0, 0, 0, 0, 0 };
+    byte *input = new byte[length] { 0, 0, 0, 0, 0, 0, 0, 0, 0 };
 
-    TestData(data, length);
+    TestEncodeDecodeMatchesInput(input, length);
 }
