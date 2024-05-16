@@ -37,7 +37,8 @@ void SimpitStream::Write(byte value)
         _readIndex = 0;
     }
 
-    _buffer[_writeIndex++] = value;
+    _buffer[_writeIndex] = value;
+    _writeIndex = (_writeIndex + 1) % BufferSize;
 }
 
 void SimpitStream::Write(void* values, int size)

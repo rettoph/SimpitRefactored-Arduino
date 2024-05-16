@@ -12,8 +12,11 @@ enum SimpitStreamModeEnum {
 class SimpitStream
 {
 
+public:
+    static constexpr unsigned int BufferSize = 256;
+
 private:
-    byte _buffer[256];
+    byte _buffer[BufferSize];
     int _readIndex;
     int _writeIndex;
     SimpitStreamModeEnum _mode;

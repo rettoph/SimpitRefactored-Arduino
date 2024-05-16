@@ -5,6 +5,7 @@
 #include "src/SimpitStreamTests.h"
 #include "src/COBSTests.h"
 #include "src/CheckSumTests.h"
+#include "src/SerialPortTests.h"
 
 using namespace aunit;
 
