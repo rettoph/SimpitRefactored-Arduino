@@ -6,4 +6,4 @@
 	url = https://github.com/bxparks/EpoxyDuino
 [submodule "libraries/MemStream"]
 	path = libraries/MemStream
-	url = https://github.com/Apollon77/MemStream
+	url = https://github.com/rettoph/MemStream
