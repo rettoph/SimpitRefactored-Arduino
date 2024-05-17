@@ -14,5 +14,8 @@
             "makeDirectory": "${workspaceFolder}/tests",
             "makeArgs": [ "EXTRA_CXXFLAGS=\"-g\"", "CXXFLAGS=\"-g\"", "CFLAGS=\"-g\"" ]
         }
-    ]
+    ],
+    "files.associations": {
+        "simpitmessagesubscriber": "c"
+    }
 }
