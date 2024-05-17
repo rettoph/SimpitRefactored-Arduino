@@ -2,6 +2,8 @@
 #define SimpitMessageType_h
 
 #include <Arduino.h>
+#include "SimpitMessageSubscriber.h"
+#include "SimpitStream.h"
 
 enum SimpitMessageTypeEnum { 
     Unknown, 
@@ -17,20 +19,49 @@ public:
 
     BaseSimpitMessageType(byte id, SimpitMessageTypeEnum type);
 
-    virtual void Publish(void *data) = 0;
+    virtual void Publish(SimpitStream incoming) = 0;
 };
 
-template<typename T> class SimpitMessageType : public BaseSimpitMessageType
+template<typename T> class IncomingSimpitMessageType : public BaseSimpitMessageType
 {
+private: 
+    bool _subscribed;
+    SimpitMessageSubscriber<T> *_subscriber;
+    T* _latest;
+ 
 public:
-    SimpitMessageType(byte id, SimpitMessageTypeEnum type) : BaseSimpitMessageType(id, type)
+    IncomingSimpitMessageType(byte id, SimpitMessageTypeEnum type) : BaseSimpitMessageType(id, type)
     {
-
+        _subscribed = false;
+        _latest = (T*)malloc(sizeof(T));
     }
 
-    void Publish(void *data) override
+    void Publish(SimpitStream incoming) override
     {
+        if(_subscribed == false)
+        {
+            incoming.Clear();
+            return;
+        }
 
+        if(incoming.TryReadBytes(sizeof(T), _latest) == false)
+        {
+            incoming.Clear();
+            return;
+        }
+
+        _subscriber->Process(_latest);
+    }
+
+    void Subscribe(SimpitMessageSubscriber<T> *subscriber)
+    {
+        _subscriber = subscriber;
+        _subscribed = true;
+    }
+
+    void Unsubscribe()
+    {
+        _subscribed = false;
     }
 };
 

@@ -2,15 +2,11 @@
 #define SimpitMessageSubscriber_h
 
 #include <Arduino.h>
-#include "SimpitStream.h"
 
-class BaseSimpitMessageSubscriber
+template <typename T> class SimpitMessageSubscriber
 {
-};
-
-template <typename T> class SimpitMessageSubscriber : public BaseSimpitMessageSubscriber
-{
-    virtual void Process(T);
+public:
+    virtual void Process(T* data) = 0;
 };
 
 #endif
