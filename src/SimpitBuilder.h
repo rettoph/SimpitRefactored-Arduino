@@ -21,7 +21,7 @@ public:
         return *this;
     }
 
-    Simpit Build();
+    Simpit Build(Stream &serial);
 };
 
 #endif

@@ -6,7 +6,7 @@ SimpitBuilder::SimpitBuilder()
     _types = (BaseSimpitMessageType**)malloc(sizeof(BaseSimpitMessageType*) * 512);
 }
 
-Simpit SimpitBuilder::Build()
+Simpit SimpitBuilder::Build(Stream &serial)
 {
     BaseSimpitMessageType** types = (BaseSimpitMessageType**)malloc(_typeCount * sizeof(BaseSimpitMessageType*));
     for(int i = 0; i < _typeCount; i++)
@@ -16,5 +16,5 @@ Simpit SimpitBuilder::Build()
 
     free(_types);
 
-    return Simpit(types, _typeCount);
+    return Simpit(types, _typeCount, serial);
 }

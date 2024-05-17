@@ -2,17 +2,19 @@
 #define Simpit_h
 
 #include "SimpitMessageType.h"
+#include "SerialPort.h"
 
 class Simpit
 {
 private:
     uint16_t _typeCount;
     BaseSimpitMessageType **_types;
+    SerialPort _serial;
 
     bool TryGetMessageType(byte id, BaseSimpitMessageType *&messageType);
 
 public:
-    Simpit(BaseSimpitMessageType **types, uint16_t typeCount);
+    Simpit(BaseSimpitMessageType **types, uint16_t typeCount, Stream &serial);
 
     void ReadIncoming(SimpitStream incoming);
 

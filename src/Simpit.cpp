@@ -2,10 +2,11 @@
 #include "COBS.h"
 #include "CheckSum.h"
 
-Simpit::Simpit(BaseSimpitMessageType **types, uint16_t typeCount)
+Simpit::Simpit(BaseSimpitMessageType **types, uint16_t typeCount, Stream &serial)
 {
     _types = types;
     _typeCount = typeCount; 
+    _serial = SerialPort(serial);
 }
 
 bool Simpit::TryGetMessageType(byte id, BaseSimpitMessageType *&messageType)
