@@ -21,6 +21,12 @@ public:
         return *this;
     }
 
+    template<typename T> SimpitBuilder RegisterOutgoing()
+    {
+        _types[_typeCount++] = new IncomingSimpitMessageType<T>(T::MessageTypeId, SimpitMessageTypeEnum::Outgoing);
+        return *this;
+    }
+
     Simpit Build(Stream &serial);
 };
 

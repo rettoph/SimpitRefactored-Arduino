@@ -9,14 +9,15 @@ class Simpit
 private:
     uint16_t _typeCount;
     BaseSimpitMessageType **_types;
-    SerialPort _serial;
+    SerialPort* _serial;
+    SimpitStream _buffer;
 
     bool TryGetMessageType(byte id, BaseSimpitMessageType *&messageType);
 
 public:
     Simpit(BaseSimpitMessageType **types, uint16_t typeCount, Stream &serial);
 
-    void ReadIncoming(SimpitStream incoming);
+    int ReadIncoming();
 
     template<typename T> void Subscribe(SimpitMessageSubscriber<T>* subscriber)
     {

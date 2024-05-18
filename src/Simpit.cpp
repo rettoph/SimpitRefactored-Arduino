@@ -6,7 +6,7 @@ Simpit::Simpit(BaseSimpitMessageType **types, uint16_t typeCount, Stream &serial
 {
     _types = types;
     _typeCount = typeCount; 
-    _serial = SerialPort(serial);
+    _serial = new SerialPort(serial);
 }
 
 bool Simpit::TryGetMessageType(byte id, BaseSimpitMessageType *&messageType)
@@ -25,29 +25,28 @@ bool Simpit::TryGetMessageType(byte id, BaseSimpitMessageType *&messageType)
     return false;
 }
 
-void Simpit::ReadIncoming(SimpitStream incoming)
+int Simpit::ReadIncoming()
 {
-    if(COBS::TryDecode(incoming) == false)
+    int incoming = 0;
+    while(_serial->TryReadIncoming(_buffer))
     {
-        return;
+        byte id;
+        if(_buffer.TryReadByte(id) == false)
+        { // Invalid message
+            continue;
+        }
+
+        BaseSimpitMessageType* messageType;
+        if(this->TryGetMessageType(id, *&messageType) == false)
+        { // Unknown message type id
+            continue; // TODO: Some sort of error handling here
+        }
+
+        BaseIncomingSimpitMessageType* casted = (BaseIncomingSimpitMessageType*)messageType;
+        casted->Publish(_buffer);
+        incoming++;
     }
 
-    if(CheckSum::ValidateCheckSum(incoming) == false)
-    {
-        return;
-    }
-
-    byte id;
-    if(incoming.TryReadByte(id) == false)
-    {
-        return;
-    }
-
-    BaseSimpitMessageType* messageType;
-    if(this->TryGetMessageType(id, *&messageType) == false)
-    {
-        return; // TODO: Some sort of error handling here
-    }
-
-    messageType->Publish(incoming);
+    _buffer.Clear();
+    return incoming;
 }
