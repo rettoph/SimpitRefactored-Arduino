@@ -16,6 +16,6 @@ Simpit* SimpitBuilder::Build(Stream &serial)
 
     free(_types);
 
-    Simpit simpit = Simpit(types, _typeCount, serial);
-    return &simpit;
+    Simpit* simpit = new Simpit(types, _typeCount, serial);
+    return simpit;
 }

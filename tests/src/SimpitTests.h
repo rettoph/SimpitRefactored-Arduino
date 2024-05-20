@@ -41,10 +41,10 @@ testF(SimpitTests, read_incoming_message)
     byte buffer[256];
     Stream* serial = new MemStream(buffer, 256, 0, true);
 
-    Simpit simpit = SimpitBuilder().RegisterIncoming<TestStruct>().Build(*serial);
+    Simpit* simpit = SimpitBuilder().RegisterIncoming<TestStruct>().Build(*serial);
 
     TestStructSubscriber subscriber = TestStructSubscriber();
-    simpit.Subscribe(&subscriber);
+    simpit->Subscribe(&subscriber);
 
     // Add some noise to the test struct
     TestStruct::Instance = new TestStruct();
@@ -72,7 +72,7 @@ testF(SimpitTests, read_incoming_message)
     assertNotEqual(TestStruct::Instance->Value1, TestStruct::Instance->Value2);
 
     // Publish "incoming" data
-    int recieved = simpit.ReadIncoming();
+    int recieved = simpit->ReadIncoming();
     assertEqual(recieved, 1);
 
     // The custom subscriber above simply sets both values equal to each other.
@@ -86,15 +86,10 @@ testF(SimpitTests, write_outgoing_message)
     byte buffer[256];
     Stream* serial = new MemStream(buffer, 256, 0, true);
 
-    Simpit simpit = SimpitBuilder().RegisterIncoming<TestStruct>().Build(*serial);
+    Simpit* simpit = SimpitBuilder().RegisterIncoming<TestStruct>().Build(*serial);
 
     TestStructSubscriber subscriber = TestStructSubscriber();
-    simpit.Subscribe(&subscriber);
-
-    while(simpit.Init() == false)
-    {
-        delay(500);
-    }
+    simpit->Subscribe(&subscriber);
 
     // Add some noise to the test struct
     TestStruct::Instance = new TestStruct();
@@ -122,11 +117,22 @@ testF(SimpitTests, write_outgoing_message)
     assertNotEqual(TestStruct::Instance->Value1, TestStruct::Instance->Value2);
 
     // Publish "incoming" data
-    int recieved = simpit.ReadIncoming();
+    int recieved = simpit->ReadIncoming();
     assertEqual(recieved, 1);
 
     // The custom subscriber above simply sets both values equal to each other.
     assertEqual(TestStruct::Instance->Value1, TestStruct::Instance->Value2);
 
+    delete serial;
+}
+
+testF(SimpitTests, init)
+{
+    byte buffer[256];
+    Stream* serial = new MemStream(buffer, 256, 0, true);
+
+    Simpit* simpit = SimpitBuilder().RegisterIncoming<TestStruct>().Build(*serial);
+    simpit->Init();
+    
     delete serial;
 }
