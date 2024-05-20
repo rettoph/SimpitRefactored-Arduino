@@ -13,23 +13,15 @@ SIMPIT_DECLARE_INCOMING_TYPE(EchoRequest, SIMPIT_CORE_INCOMING_ECHO_REQUEST_ID);
 
 SimpitBuilder::SimpitBuilder()
 {
-    _typeCount = 0;
-    _types = (BaseSimpitMessageType**)malloc(sizeof(BaseSimpitMessageType*) * 512);
+    _messageTypes = new SimpitMessageTypeProvider(512);
 
     this->RegisterOutgoing<CustomLog>();
 }
 
 Simpit* SimpitBuilder::Build(Stream &serial)
 {
-    BaseSimpitMessageType** types = (BaseSimpitMessageType**)malloc(_typeCount * sizeof(BaseSimpitMessageType*));
-    for(int i = 0; i < _typeCount; i++)
-    {
-        types[i] = _types[i];
-    }
-
-    free(_types);
-
-    Simpit* simpit = new Simpit(types, _typeCount, serial);
+    _messageTypes->Trim();
+    Simpit* simpit = new Simpit(_messageTypes, serial);
 
     return simpit;
 }

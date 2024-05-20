@@ -6,10 +6,9 @@
 
 #define SIMPIT_VERSION "2.4.0"
 
-Simpit::Simpit(BaseSimpitMessageType **types, uint16_t typeCount, Stream &serial)
+Simpit::Simpit(SimpitMessageTypeProvider *messageTypes, Stream &serial)
 {
-    _types = types;
-    _typeCount = typeCount; 
+    _messageTypes = messageTypes;
     _serial = new SerialPort(serial);
 }
 
@@ -67,25 +66,9 @@ bool Simpit::Init(byte response)
     return true;
 }
 
-bool Simpit::TryGetMessageType(byte id, SimpitMessageTypeEnum type, BaseSimpitMessageType *&messageType)
+void Simpit::Update()
 {
-    for(int i = 0; i < _typeCount; i++)
-    {
-        if(_types[i]->Id != id)
-        {
-            continue;
-        }
-
-        if(_types[i]->Type != type)
-        {
-            continue;;
-        }
-
-        messageType = *&_types[i];
-        return true;
-    }
-
-    return false;
+    this->ReadIncoming();
 }
 
 int Simpit::ReadIncoming()
@@ -100,9 +83,10 @@ int Simpit::ReadIncoming()
         }
 
         BaseSimpitMessageType* messageType;
-        if(this->TryGetMessageType(id, SimpitMessageTypeEnum::Incoming, *&messageType) == false)
+        if(_messageTypes->TryGetMessageType(id, SimpitMessageTypeEnum::Incoming, *&messageType) == false)
         { // Unknown message type id
-            continue; // TODO: Some sort of error handling here
+            this->Log("Simpit-Arduino: Unknown message: " + id);
+            continue;
         }
 
         BaseIncomingSimpitMessageType* casted = (BaseIncomingSimpitMessageType*)messageType;
