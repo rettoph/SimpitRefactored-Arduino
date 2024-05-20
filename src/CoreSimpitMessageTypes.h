@@ -4,7 +4,7 @@
 #include "FixedString.h"
 #include "SimpitMessageData.h"
 
-enum SynchronisationMessageTypeEnum : byte
+enum struct SynchronisationMessageTypeEnum : byte
 {
     SYN = 0x0,
     SYNACK = 0x1,
@@ -13,10 +13,34 @@ enum SynchronisationMessageTypeEnum : byte
 
 struct Synchronisation : public SimpitMessageData
 {
-    static const byte MessageTypeId = 0;
+    static const byte MessageTypeId = 0; // Outgoing
 
     SynchronisationMessageTypeEnum Type;
     FixedString Version;
+} __attribute__((packed));
+
+struct Handshake : public SimpitMessageData
+{
+    static const byte MessageTypeId = 0; // Incoming
+
+    byte HandshakeType;
+    byte Payload;
+} __attribute__((packed));
+
+enum struct CustomLogFlags : byte
+{
+    None = 0,
+    Verbose = 1,
+    PrintToScreen = 2,
+    NoHeader = 4
+};
+
+struct CustomLog : public SimpitMessageData
+{
+    static const byte MessageTypeId = 25; // Outgoing
+
+    CustomLogFlags Flags;
+    FixedString Value;
 } __attribute__((packed));
 
 #endif

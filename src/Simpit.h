@@ -3,6 +3,7 @@
 
 #include "SimpitMessageType.h"
 #include "SerialPort.h"
+#include "CoreSimpitMessageTypes.h"
 
 class Simpit
 {
@@ -12,7 +13,7 @@ private:
     SerialPort* _serial;
     SimpitStream _buffer;
 
-    bool TryGetMessageType(byte id, BaseSimpitMessageType *&messageType);
+    bool TryGetMessageType(byte id, BaseSimpitMessageType *&messageType, SimpitMessageTypeEnum type);
 
 public:
   /** Default constructor. Usually called via SimpitBuilder::Build()
@@ -29,14 +30,26 @@ public:
       to ensure you've run `Serial.begin(115200)` (or similar) before calling
       this method.
   */
-    bool Init();
+    bool Init(byte response);
 
     int ReadIncoming();
+
+    template<typename T> void WriteOutgoing(T data)
+    {
+        BaseSimpitMessageType* messageType;
+        if(this->TryGetMessageType(T::MessageTypeId, *&messageType, SimpitMessageTypeEnum::Outgoing) == false)
+        {
+            return; // TODO: Some sort of error handling here
+        }
+
+        OutgoingSimpitMessageType<T>* casted = (OutgoingSimpitMessageType<T>*)messageType;
+        casted->Publish(_serial, &data);
+    }
 
     template<typename T> void Subscribe(SimpitMessageSubscriber<T>* subscriber)
     {
         BaseSimpitMessageType* messageType;
-        if(this->TryGetMessageType(T::MessageTypeId, *&messageType) == false)
+        if(this->TryGetMessageType(T::MessageTypeId, *&messageType, SimpitMessageTypeEnum::Incoming) == false)
         {
             return; // TODO: Some sort of error handling here
         }
@@ -44,6 +57,9 @@ public:
         IncomingSimpitMessageType<T>* casted = (IncomingSimpitMessageType<T>*)messageType;
         casted->Subscribe(subscriber);
     }
+
+    void Log(String value);
+    void Log(String value, CustomLogFlags flags);
 };
 
 #endif

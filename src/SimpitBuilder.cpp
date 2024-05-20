@@ -1,5 +1,7 @@
 #include "SimpitBuilder.h"
 
+SIMPIT_DECLARE_OUTGOING_TYPE(CustomLog);
+
 SimpitBuilder::SimpitBuilder()
 {
     _typeCount = 0;

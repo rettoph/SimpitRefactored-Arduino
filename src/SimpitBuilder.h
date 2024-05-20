@@ -4,6 +4,7 @@
 #include <Arduino.h>
 #include "SimpitMessageType.h"
 #include "Simpit.h"
+#include "SimpitMacros.h"
 
 class SimpitBuilder
 {

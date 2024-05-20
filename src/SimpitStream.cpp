@@ -4,7 +4,7 @@ SimpitStream::SimpitStream()
 {
     _readIndex = 0;
     _writeIndex = 0;
-    _mode = None;
+    _mode = SimpitStreamModeEnum::None;
 }
 
 bool SimpitStream::SetMode(SimpitStreamModeEnum mode, int& index)

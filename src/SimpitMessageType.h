@@ -6,7 +6,7 @@
 #include "SimpitStream.h"
 #include "SerialPort.h"
 
-enum SimpitMessageTypeEnum { 
+enum struct SimpitMessageTypeEnum { 
     Unknown, 
     Incoming, 
     Outgoing 
@@ -82,8 +82,6 @@ public:
     {
         
     }
-
-    virtual void Publish(SerialPort serial, void* data) = 0;
 };
 
 template<typename T> class OutgoingSimpitMessageType : public BaseOutgoingSimpitMessageType
@@ -100,9 +98,9 @@ public:
         _latest = (T*)malloc(sizeof(T));
     }
 
-    void Publish(SerialPort serial, void* data) override
+    void Publish(SerialPort* serial, T* data)
     {
-        serial.TryWriteOutgoing(this->Id, data, sizeof(T));
+        serial->TryWriteOutgoing(this->Id, (void*)data, sizeof(T));
     }
 };
 

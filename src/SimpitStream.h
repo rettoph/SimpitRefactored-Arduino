@@ -3,7 +3,7 @@
 
 #include <Arduino.h>
 
-enum SimpitStreamModeEnum { 
+enum struct SimpitStreamModeEnum { 
     None, 
     Read, 
     Write 
