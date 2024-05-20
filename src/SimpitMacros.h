@@ -14,7 +14,7 @@
     template<> const byte IncomingSimpitMessageType<TYPE>::MessageTypeId = MESSAGE_ID; \
     template bool SimpitMessageTypeProvider::TryRegisterIncoming<TYPE>(); \
     template SimpitBuilder SimpitBuilder::RegisterIncoming<TYPE>(); \
-    template void SimpitBuilder::RegisterCallback<TYPE>(void (*callback)(void*, TYPE*));
+    template SimpitBuilder SimpitBuilder::RegisterCallback<TYPE>(void (*callback)(void*, TYPE*));
 
 #define SIMPIT_DECLARE_OUTGOING_TYPE(TYPE, MESSAGE_ID) \
     template class OutgoingSimpitMessageType<TYPE>; \

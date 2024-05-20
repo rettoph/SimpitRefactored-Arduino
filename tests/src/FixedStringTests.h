@@ -46,6 +46,6 @@ testF(FixedStringTests, set_over_buffer_get_trimmed)
     value->Set(input);
     output = value->Get();
 
-    assertEqual(output.length(), FixedString::BufferSize);
-    assertEqual(input.substring(0, FixedString::BufferSize), output);
+    assertEqual(output.length(), (unsigned int)SIMPIT_FIXED_STRING_BUFFER_SIZE);
+    assertEqual(input.substring(0, SIMPIT_FIXED_STRING_BUFFER_SIZE), output);
 }

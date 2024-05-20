@@ -27,16 +27,18 @@ public:
         return *this;
     }
 
-    template<typename T> void RegisterCallback(void (*callback)(void*, T*))
+    template<typename T> SimpitBuilder RegisterCallback(void (*callback)(void*, T*))
     {
         BaseSimpitMessageType* messageType;
         if(_messageTypes->TryGetMessageType(OutgoingSimpitMessageType<T>::MessageTypeId, SimpitMessageTypeEnum::Incoming, *&messageType) == false)
         {
-            return; // TODO: Some sort of error handling here
+            return *this; // TODO: Some sort of error handling here
         }
 
         IncomingSimpitMessageType<T>* casted = (IncomingSimpitMessageType<T>*)messageType;
         casted->RegisterCallback(callback);
+
+        return *this;
     }
 
     Simpit* Build(Stream &serial);

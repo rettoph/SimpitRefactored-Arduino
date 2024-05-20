@@ -2,7 +2,6 @@
 #define SimpitMessageType_h
 
 #include <Arduino.h>
-#include "SimpitMessageSubscriber.h"
 #include "SimpitStream.h"
 #include "SerialPort.h"
 
@@ -65,7 +64,7 @@ public:
         _callback(sender, _latest);
     }
 
-    void RegisterCallback(void *callback(void*, T*))
+    void RegisterCallback(void (*callback)(void*, T*))
     {
         _callback = callback;
         _hasCallback = true;

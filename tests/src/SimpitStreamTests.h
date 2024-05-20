@@ -35,20 +35,20 @@ testF(SimpitStreamTests, read_write_byte)
 
     stream->Clear();
     assertEqual(stream->Length(), Zero);
-    assertEqual(stream->GetMode(), SimpitStreamModeEnum::None);
+    assertTrue(stream->GetMode() == SimpitStreamModeEnum::None);
 
     stream->Write(input);
     assertEqual(stream->Length(), One);
-    assertEqual(stream->GetMode(), SimpitStreamModeEnum::Write);
+    assertTrue(stream->GetMode() == SimpitStreamModeEnum::Write);
 
     assertTrue(stream->TryReadByte(output));
     assertEqual(stream->Length(), Zero);
-    assertEqual(stream->GetMode(), SimpitStreamModeEnum::Read);
+    assertTrue(stream->GetMode() == SimpitStreamModeEnum::Read);
     assertEqual(input, output);
 
     stream->Clear();
     assertEqual(stream->Length(), Zero);
-    assertEqual(stream->GetMode(), SimpitStreamModeEnum::None);
+    assertTrue(stream->GetMode() == SimpitStreamModeEnum::None);
 }
 
 testF(SimpitStreamTests, read_write_bytes)
@@ -58,21 +58,21 @@ testF(SimpitStreamTests, read_write_bytes)
 
     stream->Clear();
     assertEqual(stream->Length(), Zero);
-    assertEqual(stream->GetMode(), SimpitStreamModeEnum::None);
+    assertTrue(stream->GetMode() == SimpitStreamModeEnum::None);
 
     stream->Write(&input, sizeof(FixedString));
     assertEqual(stream->Length(), (unsigned int)sizeof(FixedString));
-    assertEqual(stream->GetMode(), SimpitStreamModeEnum::Write);
+    assertTrue(stream->GetMode() == SimpitStreamModeEnum::Write);
 
     assertTrue(stream->TryReadBytes(sizeof(FixedString), &output));
     assertTrue(memcmp(&input, &output, sizeof(FixedString)) == Zero);
     assertEqual(input.Get(), output.Get());
     assertEqual(stream->Length(), Zero);
-    assertEqual(stream->GetMode(), SimpitStreamModeEnum::Read);
+    assertTrue(stream->GetMode() == SimpitStreamModeEnum::Read);
 
     stream->Clear();
     assertEqual(stream->Length(), Zero);
-    assertEqual(stream->GetMode(), SimpitStreamModeEnum::None);
+    assertTrue(stream->GetMode() == SimpitStreamModeEnum::None);
 }
 
 testF(SimpitStreamTests, read_write_string)
@@ -82,18 +82,18 @@ testF(SimpitStreamTests, read_write_string)
 
     stream->Clear();
     assertEqual(stream->Length(), (unsigned)0);
-    assertEqual(stream->GetMode(), SimpitStreamModeEnum::None);
+    assertTrue(stream->GetMode() == SimpitStreamModeEnum::None);
 
     stream->Write(input);
     assertEqual(stream->Length(), (int)sizeof(int) + input.length());
-    assertEqual(stream->GetMode(), SimpitStreamModeEnum::Write);
+    assertTrue(stream->GetMode() == SimpitStreamModeEnum::Write);
 
     assertTrue(stream->TryReadString(&output));
     assertEqual(stream->Length(), Zero);
-    assertEqual(stream->GetMode(), SimpitStreamModeEnum::Read);
+    assertTrue(stream->GetMode() == SimpitStreamModeEnum::Read);
     assertEqual(input, output);
 
     stream->Clear();
     assertEqual(stream->Length(), Zero);
-    assertEqual(stream->GetMode(), SimpitStreamModeEnum::None);
+    assertTrue(stream->GetMode() == SimpitStreamModeEnum::None);
 }
