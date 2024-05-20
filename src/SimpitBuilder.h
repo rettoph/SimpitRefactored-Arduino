@@ -23,7 +23,7 @@ public:
 
     template<typename T> SimpitBuilder RegisterOutgoing()
     {
-        _types[_typeCount++] = new IncomingSimpitMessageType<T>(T::MessageTypeId, SimpitMessageTypeEnum::Outgoing);
+        _types[_typeCount++] = new OutgoingSimpitMessageType<T>(T::MessageTypeId, SimpitMessageTypeEnum::Outgoing);
         return *this;
     }
 

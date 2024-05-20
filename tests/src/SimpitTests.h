@@ -91,6 +91,11 @@ testF(SimpitTests, write_outgoing_message)
     TestStructSubscriber subscriber = TestStructSubscriber();
     simpit.Subscribe(&subscriber);
 
+    while(simpit.Init() == false)
+    {
+        delay(500);
+    }
+
     // Add some noise to the test struct
     TestStruct::Instance = new TestStruct();
     TestStruct::Instance->Value1 = 420;

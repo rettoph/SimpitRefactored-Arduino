@@ -69,3 +69,11 @@ bool SerialPort::TryWriteOutgoing(byte messageTypeId, void* data, unsigned int s
 
     return true;
 }
+
+void SerialPort::Clear()
+{
+    while(_serial->available())
+    {
+        _serial->read();
+    }
+}

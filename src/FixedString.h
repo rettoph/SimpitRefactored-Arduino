@@ -22,6 +22,6 @@ public:
 
     void Set(char *value, int length);
     void Set(String value);
-};
+} __attribute__((packed));
 
 #endif

@@ -4,6 +4,7 @@
 #include <Arduino.h>
 #include "SimpitMessageSubscriber.h"
 #include "SimpitStream.h"
+#include "SerialPort.h"
 
 enum SimpitMessageTypeEnum { 
     Unknown, 
@@ -23,6 +24,11 @@ public:
 class BaseIncomingSimpitMessageType : public BaseSimpitMessageType
 {
 public:
+    BaseIncomingSimpitMessageType(byte id, SimpitMessageTypeEnum type) : BaseSimpitMessageType(id, type)
+    {
+
+    }
+
     virtual void Publish(SimpitStream incoming) = 0;
 };
 
@@ -34,7 +40,7 @@ private:
     T* _latest;
  
 public:
-    IncomingSimpitMessageType(byte id, SimpitMessageTypeEnum type) : BaseSimpitMessageType(id, type)
+    IncomingSimpitMessageType(byte id, SimpitMessageTypeEnum type) : BaseIncomingSimpitMessageType(id, type)
     {
         _subscribed = false;
         _latest = (T*)malloc(sizeof(T));
@@ -72,10 +78,15 @@ public:
 class BaseOutgoingSimpitMessageType : public BaseSimpitMessageType
 {
 public:
-    virtual void Publish(SimpitStream incoming) = 0;
+    BaseOutgoingSimpitMessageType(byte id, SimpitMessageTypeEnum type) : BaseSimpitMessageType(id, type)
+    {
+        
+    }
+
+    virtual void Publish(SerialPort serial, void* data) = 0;
 };
 
-template<typename T> class IncomingSimpitMessageType : public BaseIncomingSimpitMessageType
+template<typename T> class OutgoingSimpitMessageType : public BaseOutgoingSimpitMessageType
 {
 private: 
     bool _subscribed;
@@ -83,38 +94,15 @@ private:
     T* _latest;
  
 public:
-    IncomingSimpitMessageType(byte id, SimpitMessageTypeEnum type) : BaseSimpitMessageType(id, type)
+    OutgoingSimpitMessageType(byte id, SimpitMessageTypeEnum type) : BaseOutgoingSimpitMessageType(id, type)
     {
         _subscribed = false;
         _latest = (T*)malloc(sizeof(T));
     }
 
-    void Publish(SimpitStream incoming) override
+    void Publish(SerialPort serial, void* data) override
     {
-        if(_subscribed == false)
-        {
-            incoming.Clear();
-            return;
-        }
-
-        if(incoming.TryReadBytes(sizeof(T), _latest) == false)
-        {
-            incoming.Clear();
-            return;
-        }
-
-        _subscriber->Process(_latest);
-    }
-
-    void Subscribe(SimpitMessageSubscriber<T> *subscriber)
-    {
-        _subscriber = subscriber;
-        _subscribed = true;
-    }
-
-    void Unsubscribe()
-    {
-        _subscribed = false;
+        serial.TryWriteOutgoing(this->Id, data, sizeof(T));
     }
 };
 

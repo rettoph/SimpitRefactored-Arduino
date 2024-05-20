@@ -18,6 +18,8 @@ public:
     bool TryReadIncoming(SimpitStream &incoming);
 
     bool TryWriteOutgoing(byte messageTypeId, void* data, unsigned int size);
+
+    void Clear();
 };
 
 #endif

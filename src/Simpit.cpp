@@ -1,12 +1,29 @@
 #include "Simpit.h"
 #include "COBS.h"
 #include "CheckSum.h"
+#include "CoreSimpitMessageTypes.h"
+
+#define SIMPIT_VERSION "2.4.0"
 
 Simpit::Simpit(BaseSimpitMessageType **types, uint16_t typeCount, Stream &serial)
 {
     _types = types;
     _typeCount = typeCount; 
     _serial = new SerialPort(serial);
+}
+
+bool Simpit::Init()
+{
+    // Empty the serial buffer
+    _serial->Clear();
+
+    Synchronisation synchronisation = Synchronisation();
+    synchronisation.Type = SynchronisationMessageTypeEnum::SYN;
+    synchronisation.Version = FixedString(SIMPIT_VERSION);
+
+    _serial->TryWriteOutgoing(Synchronisation::MessageTypeId, &synchronisation, sizeof(Synchronisation));
+
+    return false;
 }
 
 bool Simpit::TryGetMessageType(byte id, BaseSimpitMessageType *&messageType)
