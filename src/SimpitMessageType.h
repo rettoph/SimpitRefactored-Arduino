@@ -29,26 +29,28 @@ public:
 
     }
 
-    virtual void Publish(SimpitStream incoming) = 0;
+    virtual void Publish(void* sender, SimpitStream incoming) = 0;
 };
 
 template<typename T> class IncomingSimpitMessageType : public BaseIncomingSimpitMessageType
 {
 private: 
-    bool _subscribed;
-    SimpitMessageSubscriber<T> *_subscriber;
+    bool _hasCallback;
+    void (*_callback)(void*, T*);
     T* _latest;
  
 public:
+    static const byte MessageTypeId;
+
     IncomingSimpitMessageType(byte id, SimpitMessageTypeEnum type) : BaseIncomingSimpitMessageType(id, type)
     {
-        _subscribed = false;
+        _hasCallback = false;
         _latest = (T*)malloc(sizeof(T));
     }
 
-    void Publish(SimpitStream incoming) override
+    void Publish(void* sender, SimpitStream incoming) override
     {
-        if(_subscribed == false)
+        if(_hasCallback == false)
         {
             incoming.Clear();
             return;
@@ -60,18 +62,13 @@ public:
             return;
         }
 
-        _subscriber->Process(_latest);
+        _callback(sender, _latest);
     }
 
-    void Subscribe(SimpitMessageSubscriber<T> *subscriber)
+    void RegisterCallback(void *callback(void*, T*))
     {
-        _subscriber = subscriber;
-        _subscribed = true;
-    }
-
-    void Unsubscribe()
-    {
-        _subscribed = false;
+        _callback = callback;
+        _hasCallback = true;
     }
 };
 
@@ -87,14 +84,13 @@ public:
 template<typename T> class OutgoingSimpitMessageType : public BaseOutgoingSimpitMessageType
 {
 private: 
-    bool _subscribed;
-    SimpitMessageSubscriber<T> *_subscriber;
     T* _latest;
  
 public:
+    static const byte MessageTypeId;
+
     OutgoingSimpitMessageType(byte id, SimpitMessageTypeEnum type) : BaseOutgoingSimpitMessageType(id, type)
     {
-        _subscribed = false;
         _latest = (T*)malloc(sizeof(T));
     }
 

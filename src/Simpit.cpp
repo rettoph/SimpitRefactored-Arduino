@@ -2,6 +2,7 @@
 #include "COBS.h"
 #include "CheckSum.h"
 #include "CoreSimpitMessageTypes.h"
+#include "CoreSimpitMessageTypeIds.h"
 
 #define SIMPIT_VERSION "2.4.0"
 
@@ -21,7 +22,7 @@ bool Simpit::Init(byte response)
     Synchronisation synchronisation = Synchronisation();
     synchronisation.Type = SynchronisationMessageTypeEnum::SYN;
     synchronisation.Version = FixedString(SIMPIT_VERSION);
-    _serial->TryWriteOutgoing(Synchronisation::MessageTypeId, &synchronisation, sizeof(Synchronisation));
+    _serial->TryWriteOutgoing(SIMPIT_CORE_OUTGOING_SYNCHRONISATION_ID, &synchronisation, sizeof(Synchronisation));
 
     // Wait for reply - if non in 1 sec, return false
     byte count = 0;
@@ -42,7 +43,7 @@ bool Simpit::Init(byte response)
         return false;
     }
 
-    if(id != Handshake::MessageTypeId)
+    if(id != SIMPIT_CORE_INCOMING_HANDSHAKE_MESSAGE_ID)
     { // Invalid Handshake packet
         return false;
     }
@@ -61,12 +62,12 @@ bool Simpit::Init(byte response)
     }
 
     synchronisation.Type = SynchronisationMessageTypeEnum::ACK;
-    _serial->TryWriteOutgoing(Synchronisation::MessageTypeId, &synchronisation, sizeof(Synchronisation));
+    _serial->TryWriteOutgoing(SIMPIT_CORE_OUTGOING_SYNCHRONISATION_ID, &synchronisation, sizeof(Synchronisation));
 
     return true;
 }
 
-bool Simpit::TryGetMessageType(byte id, BaseSimpitMessageType *&messageType, SimpitMessageTypeEnum type)
+bool Simpit::TryGetMessageType(byte id, SimpitMessageTypeEnum type, BaseSimpitMessageType *&messageType)
 {
     for(int i = 0; i < _typeCount; i++)
     {
@@ -99,13 +100,13 @@ int Simpit::ReadIncoming()
         }
 
         BaseSimpitMessageType* messageType;
-        if(this->TryGetMessageType(id, *&messageType, SimpitMessageTypeEnum::Incoming) == false)
+        if(this->TryGetMessageType(id, SimpitMessageTypeEnum::Incoming, *&messageType) == false)
         { // Unknown message type id
             continue; // TODO: Some sort of error handling here
         }
 
         BaseIncomingSimpitMessageType* casted = (BaseIncomingSimpitMessageType*)messageType;
-        casted->Publish(_buffer);
+        casted->Publish(this, _buffer);
         incoming++;
     }
 

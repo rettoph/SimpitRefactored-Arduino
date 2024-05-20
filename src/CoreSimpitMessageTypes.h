@@ -2,7 +2,9 @@
 #define CoreSimpitMessageTypes_h
 
 #include "FixedString.h"
-#include "SimpitMessageData.h"
+#include "CoreSimpitMessageTypeIds.h"
+
+#define SIMPIT_CORE_MESSAGE_TYPE_BUFFER_SIZE 32
 
 enum struct SynchronisationMessageTypeEnum : byte
 {
@@ -11,20 +13,40 @@ enum struct SynchronisationMessageTypeEnum : byte
     ACK = 0x2
 };
 
-struct Synchronisation : public SimpitMessageData
+struct Synchronisation
 {
-    static const byte MessageTypeId = 0; // Outgoing
-
     SynchronisationMessageTypeEnum Type;
     FixedString Version;
 } __attribute__((packed));
 
-struct Handshake : public SimpitMessageData
+struct Handshake
 {
-    static const byte MessageTypeId = 0; // Incoming
-
     byte HandshakeType;
     byte Payload;
+} __attribute__((packed));
+
+struct EchoRequest
+{
+    byte MessageTypeIds[SIMPIT_CORE_MESSAGE_TYPE_BUFFER_SIZE];
+} __attribute__((packed));
+
+struct EchoResponse
+{
+    byte MessageTypeIds[SIMPIT_CORE_MESSAGE_TYPE_BUFFER_SIZE];
+} __attribute__((packed));
+
+struct CloseSerialPort
+{
+} __attribute__((packed));
+
+struct RegisterHandler
+{
+    byte MessageTypeIds[SIMPIT_CORE_MESSAGE_TYPE_BUFFER_SIZE];
+} __attribute__((packed));
+
+struct DeregisterHandler
+{
+    byte MessageTypeIds[SIMPIT_CORE_MESSAGE_TYPE_BUFFER_SIZE];
 } __attribute__((packed));
 
 enum struct CustomLogFlags : byte
@@ -35,12 +57,15 @@ enum struct CustomLogFlags : byte
     NoHeader = 4
 };
 
-struct CustomLog : public SimpitMessageData
+struct CustomLog
 {
-    static const byte MessageTypeId = 25; // Outgoing
-
     CustomLogFlags Flags;
     FixedString Value;
+} __attribute__((packed));
+
+struct Request
+{
+    byte MessageTypeId;
 } __attribute__((packed));
 
 #endif

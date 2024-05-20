@@ -2,7 +2,7 @@
 
 FixedString::FixedString()
 {
-    memset(_buffer, FixedString::NullChar, FixedString::BufferSize);
+    memset(_buffer, FixedString::NullChar, SIMPIT_FIXED_STRING_BUFFER_SIZE);
 }
 
 FixedString::FixedString(char *value, int length)
@@ -17,8 +17,8 @@ FixedString::FixedString(String value)
 
 String FixedString::Get()
 {
-    int length = FixedString::BufferSize;
-    for(unsigned int i=0; i<FixedString::BufferSize; i++)
+    int length = SIMPIT_FIXED_STRING_BUFFER_SIZE;
+    for(unsigned int i=0; i<SIMPIT_FIXED_STRING_BUFFER_SIZE; i++)
     {
         if(_buffer[i] == FixedString::NullChar)
         {
@@ -38,7 +38,7 @@ String FixedString::Get()
 
 void FixedString::Set(char *value, int length)
 {
-    for(unsigned int i=0; i<FixedString::BufferSize; i++)
+    for(unsigned int i=0; i<SIMPIT_FIXED_STRING_BUFFER_SIZE; i++)
     {
         if(i < length)
         {

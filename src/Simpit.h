@@ -13,7 +13,7 @@ private:
     SerialPort* _serial;
     SimpitStream _buffer;
 
-    bool TryGetMessageType(byte id, BaseSimpitMessageType *&messageType, SimpitMessageTypeEnum type);
+    bool TryGetMessageType(byte id, SimpitMessageTypeEnum type, BaseSimpitMessageType *&messageType);
 
 public:
   /** Default constructor. Usually called via SimpitBuilder::Build()
@@ -34,10 +34,12 @@ public:
 
     int ReadIncoming();
 
+    void Update();
+
     template<typename T> void WriteOutgoing(T data)
     {
         BaseSimpitMessageType* messageType;
-        if(this->TryGetMessageType(T::MessageTypeId, *&messageType, SimpitMessageTypeEnum::Outgoing) == false)
+        if(this->TryGetMessageType(OutgoingSimpitMessageType<T>::MessageTypeId, SimpitMessageTypeEnum::Outgoing, *&messageType) == false)
         {
             return; // TODO: Some sort of error handling here
         }
@@ -46,16 +48,16 @@ public:
         casted->Publish(_serial, &data);
     }
 
-    template<typename T> void Subscribe(SimpitMessageSubscriber<T>* subscriber)
+    template<typename T> void RegisterCallback(void (*callback)(void*, T*))
     {
         BaseSimpitMessageType* messageType;
-        if(this->TryGetMessageType(T::MessageTypeId, *&messageType, SimpitMessageTypeEnum::Incoming) == false)
+        if(this->TryGetMessageType(OutgoingSimpitMessageType<T>::MessageTypeId, SimpitMessageTypeEnum::Incoming, *&messageType) == false)
         {
             return; // TODO: Some sort of error handling here
         }
 
         IncomingSimpitMessageType<T>* casted = (IncomingSimpitMessageType<T>*)messageType;
-        casted->Subscribe(subscriber);
+        casted->RegisterCallback(callback);
     }
 
     void Log(String value);

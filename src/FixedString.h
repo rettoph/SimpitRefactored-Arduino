@@ -3,15 +3,14 @@
 
 #include <Arduino.h>
 
+#define SIMPIT_FIXED_STRING_BUFFER_SIZE 32
+
 struct FixedString
 {
-public:
-    static constexpr unsigned int BufferSize = 32;
-
 private:
     static constexpr byte NullChar = '\0';
 
-    char _buffer[BufferSize];
+    char _buffer[SIMPIT_FIXED_STRING_BUFFER_SIZE];
 
 public:
     FixedString();

@@ -18,13 +18,13 @@ public:
 
     template<typename T> SimpitBuilder RegisterIncoming()
     {
-        _types[_typeCount++] = new IncomingSimpitMessageType<T>(T::MessageTypeId, SimpitMessageTypeEnum::Incoming);
+        _types[_typeCount++] = new IncomingSimpitMessageType<T>(IncomingSimpitMessageType<T>::MessageTypeId, SimpitMessageTypeEnum::Incoming);
         return *this;
     }
 
     template<typename T> SimpitBuilder RegisterOutgoing()
     {
-        _types[_typeCount++] = new OutgoingSimpitMessageType<T>(T::MessageTypeId, SimpitMessageTypeEnum::Outgoing);
+        _types[_typeCount++] = new OutgoingSimpitMessageType<T>(OutgoingSimpitMessageType<T>::MessageTypeId, SimpitMessageTypeEnum::Outgoing);
         return *this;
     }
 
