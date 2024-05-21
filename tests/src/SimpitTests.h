@@ -12,7 +12,8 @@ using namespace aunit;
 
 struct TestMessage
 {
-public:
+    static TestMessage Instance;
+
     int Value1;
     int Value2;
 };
@@ -20,15 +21,15 @@ public:
 class SimpitTests: public TestOnce
 {
 public:
-    TestMessage* data;
+    
 };
 
 void TestMessagehandler(void *sender, TestMessage *data)
 {
-
+    TestMessage::Instance.Value1 = TestMessage::Instance.Value2;
 }
 
-
+TestMessage TestMessage::Instance = TestMessage();
 SIMPIT_DECLARE_INCOMING_TYPE(TestMessage, 123);
 
 testF(SimpitTests, read_incoming_message)
@@ -40,9 +41,8 @@ testF(SimpitTests, read_incoming_message)
         .Build(*serial);
 
     // Add some noise to the test struct
-    this->data = new TestMessage();
-    this->data->Value1 = 420;
-    this->data->Value2 = 69;
+    TestMessage::Instance.Value1 = 420;
+    TestMessage::Instance.Value2 = 69;
 
     // Simulate and serialize an incoming message
     // 1. Write MessageTypeId byte
@@ -51,7 +51,7 @@ testF(SimpitTests, read_incoming_message)
     // 4. COBS encode
     SimpitStream stream = SimpitStream();
     stream.Write(GenericIncomingSimpitMessageType<TestMessage>::MessageTypeId);
-    stream.Write(&this->data, sizeof(TestMessage));
+    stream.Write(&TestMessage::Instance, sizeof(TestMessage));
     stream.Write(CheckSum::CalculateCheckSum(stream));
     assertTrue(COBS::TryEncode(stream));
     // Write the stream data to the simulated serial Stream
@@ -62,14 +62,14 @@ testF(SimpitTests, read_incoming_message)
     }
 
     // Ensure test struct currently not equal
-    assertNotEqual(this->data->Value1, this->data->Value2);
+    assertNotEqual(TestMessage::Instance.Value1, TestMessage::Instance.Value2);
 
     // Publish "incoming" data
     int recieved = simpit->ReadIncoming();
     assertEqual(recieved, 1);
 
-    // The custom handler above simply sets both values equal to each other.
-    assertEqual(this->data->Value1, this->data->Value2);
+    // The registered custom handler above simply sets both values equal to each other.
+    assertEqual(TestMessage::Instance.Value1, TestMessage::Instance.Value2);
 
     delete serial;
 }
