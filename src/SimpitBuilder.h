@@ -6,6 +6,7 @@
 #include "Simpit.h"
 #include "SimpitMacros.h"
 #include "SimpitMessageTypeProvider.h"
+#include "function_objects.h"
 
 class SimpitBuilder
 {
@@ -27,16 +28,16 @@ public:
         return *this;
     }
 
-    template<typename T> SimpitBuilder RegisterCallback(void (*callback)(void*, T*))
+    template<typename T> SimpitBuilder RegisterIncomingHandler(FunctionObject<void(void*, T*)> handler)
     {
         BaseSimpitMessageType* messageType;
-        if(_messageTypes->TryGetMessageType(OutgoingSimpitMessageType<T>::MessageTypeId, SimpitMessageTypeEnum::Incoming, *&messageType) == false)
+        if(_messageTypes->TryGetMessageType(IncomingSimpitMessageType<T>::MessageTypeId, SimpitMessageTypeEnum::Incoming, *&messageType) == false)
         {
             return *this; // TODO: Some sort of error handling here
         }
 
         IncomingSimpitMessageType<T>* casted = (IncomingSimpitMessageType<T>*)messageType;
-        casted->RegisterCallback(callback);
+        casted->RegisterHandler(handler);
 
         return *this;
     }

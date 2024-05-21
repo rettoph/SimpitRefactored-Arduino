@@ -7,3 +7,6 @@
 [submodule "libraries/MemStream"]
 	path = libraries/MemStream
 	url = https://github.com/rettoph/MemStream
+[submodule "libraries/function_objects"]
+	path = libraries/function_objects
+	url = git@github.com:fopeczek/function_objects.git
