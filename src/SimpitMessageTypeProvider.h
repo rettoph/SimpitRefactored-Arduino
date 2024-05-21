@@ -9,24 +9,24 @@ class SimpitMessageTypeProvider
 {
 private:
     byte _incomingCount;
-    IncomingSimpitMessageType *_incoming;
+    IncomingSimpitMessageType **_incoming;
 
     byte _outgoingCount;
-    OutgoingSimpitMessageType *_outgoing;
+    OutgoingSimpitMessageType **_outgoing;
 
 public:
-    SimpitMessageTypeProvider(uint16_t capacity);
+    SimpitMessageTypeProvider();
     ~SimpitMessageTypeProvider();
 
     bool TryGetIncomingMessageType(byte id, IncomingSimpitMessageType *&messageType);
 
     bool TryGetOutgoingMessageType(byte id, OutgoingSimpitMessageType *&messageType);
 
-    template<typename T> bool RegisterIncoming()
+    template<typename T> bool TryRegisterIncoming(void(*handler)(void*, T*))
     {
-        if(_incomingCount % SimpitMessageTypeProvider_BufferIncrement == 0)
+        if(_incomingCount > 0 && _incomingCount % SimpitMessageTypeProvider_BufferIncrement == 0)
         { // Time to resize the incoming buffer
-            IncomingSimpitMessageType* newIncoming = (IncomingSimpitMessageType*)malloc(sizeof(IncomingSimpitMessageType*) * (_incomingCount + SimpitMessageTypeProvider_BufferIncrement));
+            IncomingSimpitMessageType** newIncoming = (IncomingSimpitMessageType**)malloc(sizeof(IncomingSimpitMessageType**) * (_incomingCount + SimpitMessageTypeProvider_BufferIncrement));
             for(int i=0; i<_incomingCount; i++)
             {
                 newIncoming[i] = _incoming[i];
@@ -36,22 +36,17 @@ public:
             _incoming = newIncoming;
         }
 
-        IncomingSimpitMessageType *messageType;
-        if(this->TryGetIncomingMessageType(GenericIncomingSimpitMessageType<T>::MessageTypeId, SimpitMessageTypeEnum::Incoming, messageType) == true)
-        {
-            return false;
-        }
-
-        _incoming[_incomingCount++] = &GenericIncomingSimpitMessageType<T>::Instance;
+        GenericIncomingSimpitMessageType<T>* type = new GenericIncomingSimpitMessageType<T>(GenericIncomingSimpitMessageType<T>::MessageTypeId, handler);
+        _incoming[_incomingCount++] = (IncomingSimpitMessageType*)type;
 
         return true;
     }
 
-    template<typename T> bool RegisterOutgoing()
+    template<typename T> bool TryRegisterOutgoing()
     {
-        if(_outgoingCount % SimpitMessageTypeProvider_BufferIncrement == 0)
+        if(_outgoingCount > 0 && _outgoingCount % SimpitMessageTypeProvider_BufferIncrement == 0)
         { // Time to resize the outgoing buffer
-            OutgoingSimpitMessageType* newOutgoing = (OutgoingSimpitMessageType*)malloc(sizeof(OutgoingSimpitMessageType*) * (_outgoingCount + SimpitMessageTypeProvider_BufferIncrement));
+            OutgoingSimpitMessageType** newOutgoing = (OutgoingSimpitMessageType**)malloc(sizeof(OutgoingSimpitMessageType**) * (_outgoingCount + SimpitMessageTypeProvider_BufferIncrement));
             for(int i=0; i<_outgoingCount; i++)
             {
                 newOutgoing[i] = _outgoing[i];
@@ -61,13 +56,8 @@ public:
             _outgoing = newOutgoing;
         }
 
-        OutgoingSimpitMessageType *messageType;
-        if(this->TryGetOutgoingMessageType(GenericOutgoingSimpitMessageType<T>::MessageTypeId, SimpitMessageTypeEnum::Outgoing, messageType) == true)
-        {
-            return false;
-        }
-
-        _outgoing[_outgoingCount++] = &GenericOutgoingSimpitMessageType<T>::Instance;
+        GenericOutgoingSimpitMessageType<T>* type = new GenericOutgoingSimpitMessageType<T>(GenericOutgoingSimpitMessageType<T>::MessageTypeId);
+        _outgoing[_outgoingCount++] = (OutgoingSimpitMessageType*)type;
 
         return true;
     }

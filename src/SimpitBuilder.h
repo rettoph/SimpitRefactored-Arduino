@@ -6,7 +6,6 @@
 #include "Simpit.h"
 #include "SimpitMacros.h"
 #include "SimpitMessageTypeProvider.h"
-#include "function_objects.h"
 
 class SimpitAddon;
 
@@ -18,29 +17,15 @@ private:
 public:
     SimpitBuilder();
 
-    template<typename T> SimpitBuilder RegisterIncoming()
+    template<typename T> SimpitBuilder RegisterIncoming(void(*handler)(void*, T*))
     {
-        _messageTypes->TryRegisterIncoming<T>();
+        _messageTypes->TryRegisterIncoming<T>(handler);
         return *this;
     }
 
     template<typename T> SimpitBuilder RegisterOutgoing()
     {
         _messageTypes->TryRegisterOutgoing<T>();
-        return *this;
-    }
-
-    template<typename T> SimpitBuilder RegisterIncomingHandler(FunctionObject<void(void*, T*)> handler)
-    {
-        const SimpitMessageType* messageType;
-        if(_messageTypes->TryGetMessageType(GenericIncomingSimpitMessageType<T>::MessageTypeId, SimpitMessageTypeEnum::Incoming, *&messageType) == false)
-        {
-            return *this; // TODO: Some sort of error handling here
-        }
-
-        GenericIncomingSimpitMessageType<T>* casted = (GenericIncomingSimpitMessageType<T>*)messageType;
-        casted->RegisterHandler(handler);
-
         return *this;
     }
 

@@ -23,6 +23,11 @@ public:
     TestMessage* data;
 };
 
+void TestMessagehandler(void *sender, TestMessage *data)
+{
+
+}
+
 
 SIMPIT_DECLARE_INCOMING_TYPE(TestMessage, 123);
 
@@ -31,14 +36,7 @@ testF(SimpitTests, read_incoming_message)
     byte buffer[256];
     Stream* serial = new MemStream(buffer, 256, 0, true);
 
-    Simpit* simpit = SimpitBuilder().RegisterAddon(new KerbalSimpitAddon()).RegisterIncoming<TestMessage>()
-        .RegisterIncomingHandler<TestMessage>([this](void *sender, TestMessage *data) {
-            assertNotEqual(this->data->Value1, this->data->Value2);
-
-            this->data->Value1 = this->data->Value2;
-
-            assertEqual(this->data->Value1, this->data->Value2);
-        })
+    Simpit* simpit = SimpitBuilder().RegisterIncoming<TestMessage>(TestMessagehandler)
         .Build(*serial);
 
     // Add some noise to the test struct

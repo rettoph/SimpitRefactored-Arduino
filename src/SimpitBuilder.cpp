@@ -14,7 +14,7 @@ SIMPIT_DECLARE_INCOMING_TYPE(EchoRequest, SIMPIT_CORE_INCOMING_ECHO_REQUEST_ID);
 
 SimpitBuilder::SimpitBuilder()
 {
-    _messageTypes = new SimpitMessageTypeProvider(512);
+    _messageTypes = new SimpitMessageTypeProvider();
 
     this->RegisterOutgoing<CustomLog>();
 }

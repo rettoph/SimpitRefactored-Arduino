@@ -73,7 +73,7 @@ void Simpit::Update()
 
 int Simpit::ReadIncoming()
 {
-    int incoming = 0;
+    int count = 0;
     while(_serial->TryReadIncoming(_buffer))
     {
         byte id;
@@ -82,20 +82,19 @@ int Simpit::ReadIncoming()
             continue;
         }
 
-        const SimpitMessageType* messageType;
-        if(_messageTypes->TryGetMessageType(id, SimpitMessageTypeEnum::Incoming, *&messageType) == false)
+        IncomingSimpitMessageType* incoming;
+        if(_messageTypes->TryGetIncomingMessageType(id, *&incoming) == false)
         { // Unknown message type id
             this->Log("Simpit-Arduino: Unknown message: " + id);
             continue;
         }
 
-        IncomingSimpitMessageType* casted = (IncomingSimpitMessageType*)messageType;
-        casted->Publish(this, _buffer);
-        incoming++;
+        incoming->Publish(this, _buffer);
+        count++;
     }
 
     _buffer.Clear();
-    return incoming;
+    return count;
 }
 
 void Simpit::Log(String value)

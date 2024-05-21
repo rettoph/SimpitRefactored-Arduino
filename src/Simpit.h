@@ -13,8 +13,6 @@ private:
     SerialPort* _serial;
     SimpitStream _buffer;
 
-    
-
 public:
   /** Default constructor. Usually called via SimpitBuilder::Build()
       @param messageTypes Pointer to registered message types
@@ -37,14 +35,13 @@ public:
 
     template<typename T> void WriteOutgoing(T data)
     {
-        const SimpitMessageType* messageType;
-        if(_messageTypes->TryGetMessageType(GenericOutgoingSimpitMessageType<T>::MessageTypeId, SimpitMessageTypeEnum::Outgoing, *&messageType) == false)
+        OutgoingSimpitMessageType* outgoing;
+        if(_messageTypes->TryGetOutgoingMessageType(GenericOutgoingSimpitMessageType<T>::MessageTypeId, *&outgoing) == false)
         {
             return; // TODO: Some sort of error handling here
         }
 
-        GenericOutgoingSimpitMessageType<T>* casted = (GenericOutgoingSimpitMessageType<T>*)messageType;
-        casted->Publish(_serial, &data);
+        outgoing->Publish(_serial, &data);
     }
 
     void Log(String value);

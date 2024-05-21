@@ -1,7 +1,6 @@
-#ifndef KerbalSimpitAddon_h
-#define KerbalSimpitAddon_h
+#ifndef KerbalSimpit_h
+#define KerbalSimpit_h
 
-#include "SimpitAddon.h"
 #include "SimpitBuilder.h"
 #include "KerbalSimpitMessageTypeIds.h"
 #include "KerbalSimpitMessageTypes.h"
@@ -84,75 +83,5 @@ SIMPIT_DECLARE_OUTGOING_TYPE(Warp::Outgoing::TimewarpTo, MessageTypeIds::Outgoin
 SIMPIT_DECLARE_OUTGOING_TYPE(NavBall::Outgoing::NavballMode, MessageTypeIds::Outgoing::NavballMode);
 
 SIMPIT_DECLARE_OUTGOING_TYPE(Input::Outgoing::KeyboardEmulator, MessageTypeIds::Outgoing::KeyboardEmulator);
-
-class KerbalSimpitAddon : public SimpitAddon
-{
-    void Register(SimpitBuilder builder) override
-    {
-        builder
-            .RegisterIncoming<Resource::Incoming::LiquidFuel>()
-            .RegisterIncoming<Resource::Incoming::LiquidFuelStage>()
-            .RegisterIncoming<Resource::Incoming::Oxidizer>()
-            .RegisterIncoming<Resource::Incoming::OxidizerStage>()
-            .RegisterIncoming<Resource::Incoming::SolidFuel>()
-            .RegisterIncoming<Resource::Incoming::SolidFuelStage>()
-            .RegisterIncoming<Resource::Incoming::XenonGas>()
-            .RegisterIncoming<Resource::Incoming::XenonGasStage>()
-            .RegisterIncoming<Resource::Incoming::MonoPropellant>()
-            .RegisterIncoming<Resource::Incoming::EvaPropellant>()
-            .RegisterIncoming<Resource::Incoming::ElectricCharge>()
-            .RegisterIncoming<Resource::Incoming::Ore>()
-            .RegisterIncoming<Resource::Incoming::Ablator>()
-            .RegisterIncoming<Resource::Incoming::AblatorStage>()
-            .RegisterIncoming<Resource::Incoming::CustomResourceOne>()
-            .RegisterIncoming<Resource::Incoming::CustomResourceTwo>()
-            .RegisterIncoming<Vessel::Incoming::Altitude>()
-            .RegisterIncoming<Vessel::Incoming::Velocity>()
-            .RegisterIncoming<Vessel::Incoming::Airspeed>()
-            .RegisterIncoming<Vessel::Incoming::Apsides>()
-            .RegisterIncoming<Vessel::Incoming::ApsidesTime>()
-            .RegisterIncoming<Vessel::Incoming::Maneuver>()
-            .RegisterIncoming<Vessel::Incoming::SASInfo>()
-            .RegisterIncoming<Vessel::Incoming::OrbitInfo>()
-            .RegisterIncoming<Vessel::Incoming::Rotation>()
-            .RegisterIncoming<Vessel::Incoming::RotationCmd>()
-            .RegisterIncoming<Vessel::Incoming::TranslationCmd>()
-            .RegisterIncoming<Vessel::Incoming::WheelCmd>()
-            .RegisterIncoming<Vessel::Incoming::ThrottleCmd>()
-            .RegisterIncoming<Vessel::Incoming::ActionGroups>()
-            .RegisterIncoming<Vessel::Incoming::DeltaV>()
-            .RegisterIncoming<Vessel::Incoming::DeltaVEnv>()
-            .RegisterIncoming<Vessel::Incoming::BurnTime>()
-            .RegisterIncoming<Vessel::Incoming::CustomActionGroups>()
-            .RegisterIncoming<Vessel::Incoming::TempLimit>()
-            .RegisterIncoming<Environment::Incoming::TargetInfo>()
-            .RegisterIncoming<Environment::Incoming::SoIName>()
-            .RegisterIncoming<Environment::Incoming::SceneChange>()
-            .RegisterIncoming<Environment::Incoming::FlightStatus>()
-            .RegisterIncoming<Environment::Incoming::AtmoCondition>()
-            .RegisterIncoming<Environment::Incoming::VesselName>()
-            .RegisterIncoming<Environment::Incoming::VesselChange>();
-
-        builder
-            .RegisterOutgoing<Vessel::Outgoing::CustomActionGroupEnable>()
-            .RegisterOutgoing<Vessel::Outgoing::CustomActionGroupDisable>()
-            .RegisterOutgoing<Vessel::Outgoing::CustomActionGroupToggle>()
-            .RegisterOutgoing<Vessel::Outgoing::ActionGroupActivate>()
-            .RegisterOutgoing<Vessel::Outgoing::ActionGroupDeactivate>()
-            .RegisterOutgoing<Vessel::Outgoing::ActionGroupToggle>()
-            .RegisterOutgoing<Vessel::Outgoing::Rotation>()
-            .RegisterOutgoing<Vessel::Outgoing::Translation>()
-            .RegisterOutgoing<Vessel::Outgoing::WheelControl>()
-            .RegisterOutgoing<Vessel::Outgoing::Throttle>()
-            .RegisterOutgoing<Vessel::Outgoing::AutopilotMode>()
-            .RegisterOutgoing<Camera::Outgoing::CameraMode>()
-            .RegisterOutgoing<Camera::Outgoing::CameraRotation>()
-            .RegisterOutgoing<Camera::Outgoing::CameraTranslation>()
-            .RegisterOutgoing<Warp::Outgoing::WarpChange>()
-            .RegisterOutgoing<Warp::Outgoing::TimewarpTo>()
-            .RegisterOutgoing<NavBall::Outgoing::NavballMode>()
-            .RegisterOutgoing<Input::Outgoing::KeyboardEmulator>();
-    }
-};
 
 #endif
