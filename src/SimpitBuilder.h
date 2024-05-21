@@ -32,13 +32,13 @@ public:
 
     template<typename T> SimpitBuilder RegisterIncomingHandler(FunctionObject<void(void*, T*)> handler)
     {
-        const BaseSimpitMessageType* messageType;
-        if(_messageTypes->TryGetMessageType(IncomingSimpitMessageType<T>::MessageTypeId, SimpitMessageTypeEnum::Incoming, *&messageType) == false)
+        const SimpitMessageType* messageType;
+        if(_messageTypes->TryGetMessageType(GenericIncomingSimpitMessageType<T>::MessageTypeId, SimpitMessageTypeEnum::Incoming, *&messageType) == false)
         {
             return *this; // TODO: Some sort of error handling here
         }
 
-        IncomingSimpitMessageType<T>* casted = (IncomingSimpitMessageType<T>*)messageType;
+        GenericIncomingSimpitMessageType<T>* casted = (GenericIncomingSimpitMessageType<T>*)messageType;
         casted->RegisterHandler(handler);
 
         return *this;

@@ -2,23 +2,39 @@
 
 SimpitMessageTypeProvider::SimpitMessageTypeProvider(uint16_t capacity)
 {
-    _count = 0;
+    _incomingCount = 0;
+    _incoming = (IncomingSimpitMessageType*)malloc(sizeof(IncomingSimpitMessageType*) * SimpitMessageTypeProvider_BufferIncrement);
+
+    _outgoingCount = 0;
+    _outgoing = (OutgoingSimpitMessageType*)malloc(sizeof(OutgoingSimpitMessageType*) * SimpitMessageTypeProvider_BufferIncrement);
 }
 
-bool SimpitMessageTypeProvider::TryGetMessageType(byte id, SimpitMessageTypeEnum type, const BaseSimpitMessageType *&messageType)
+bool SimpitMessageTypeProvider::TryGetOutgoingMessageType(byte id, OutgoingSimpitMessageType *&messageType)
 {
-    for(int i = 0; i < _count; i++)
+    for(int i = 0; i < _outgoingCount; i++)
     {
-        messageType = _items[i];
+        messageType = &_outgoing[i];
 
         if(messageType->Id != id)
         {
             continue;
         }
 
-        if(messageType->Type != type)
+        return true;
+    }
+
+    return false;
+}
+
+bool SimpitMessageTypeProvider::TryGetIncomingMessageType(byte id, IncomingSimpitMessageType *&messageType)
+{
+    for(int i = 0; i < _incomingCount; i++)
+    {
+        messageType = &_incoming[i];
+
+        if(messageType->Id != id)
         {
-            continue;;
+            continue;
         }
 
         return true;

@@ -37,13 +37,13 @@ public:
 
     template<typename T> void WriteOutgoing(T data)
     {
-        const BaseSimpitMessageType* messageType;
-        if(_messageTypes->TryGetMessageType(OutgoingSimpitMessageType<T>::MessageTypeId, SimpitMessageTypeEnum::Outgoing, *&messageType) == false)
+        const SimpitMessageType* messageType;
+        if(_messageTypes->TryGetMessageType(GenericOutgoingSimpitMessageType<T>::MessageTypeId, SimpitMessageTypeEnum::Outgoing, *&messageType) == false)
         {
             return; // TODO: Some sort of error handling here
         }
 
-        OutgoingSimpitMessageType<T>* casted = (OutgoingSimpitMessageType<T>*)messageType;
+        GenericOutgoingSimpitMessageType<T>* casted = (GenericOutgoingSimpitMessageType<T>*)messageType;
         casted->Publish(_serial, &data);
     }
 

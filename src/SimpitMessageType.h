@@ -6,49 +6,22 @@
 #include "SerialPort.h"
 #include "function_objects.h"
 
-enum struct SimpitMessageTypeEnum { 
-    Unknown, 
-    Incoming, 
-    Outgoing 
-};
-
-struct BaseSimpitMessageType
+struct SimpitMessageType
 {
 public:
     byte Id;
-    SimpitMessageTypeEnum Type;
-
-    BaseSimpitMessageType(byte id, SimpitMessageTypeEnum type);
 };
 
-struct BaseIncomingSimpitMessageType : public BaseSimpitMessageType
+struct IncomingSimpitMessageType : public SimpitMessageType
 {
 public:
-    BaseIncomingSimpitMessageType(byte id, SimpitMessageTypeEnum type) : BaseSimpitMessageType(id, type)
-    {
-
-    }
-
     virtual void Publish(void* sender, SimpitStream incoming) = 0;
 };
 
-template<typename T> struct IncomingSimpitMessageType : public BaseIncomingSimpitMessageType
+template<typename T> struct GenericIncomingSimpitMessageType : public IncomingSimpitMessageType
 {
-private: 
-    bool _hasHandler;
-    FunctionObject<void(void*, T*)> _handler;
-    T _latest;
- 
 public:
-    static const IncomingSimpitMessageType<T> PROGMEM Instance;
-
-    static const byte MessageTypeId;
-
-    IncomingSimpitMessageType() : BaseIncomingSimpitMessageType(IncomingSimpitMessageType<T>::MessageTypeId, SimpitMessageTypeEnum::Incoming)
-    {
-        _hasHandler = false;
-        _latest = T();
-    }
+    static GenericIncomingSimpitMessageType<T> PROGMEM Instance;
 
     void Publish(void* sender, SimpitStream incoming) override
     {
@@ -66,37 +39,16 @@ public:
 
         _handler(sender, &_latest);
     }
-
-    void RegisterHandler(FunctionObject<void(void*, T*)> handler)
-    {
-        _handler = handler;
-        _hasHandler = true;
-    }
 };
 
-struct BaseOutgoingSimpitMessageType : public BaseSimpitMessageType
+struct OutgoingSimpitMessageType : public SimpitMessageType
 {
-public:
-    BaseOutgoingSimpitMessageType(byte id, SimpitMessageTypeEnum type) : BaseSimpitMessageType(id, type)
-    {
-        
-    }
 };
 
-template<typename T> struct OutgoingSimpitMessageType : public BaseOutgoingSimpitMessageType
+template<typename T> struct GenericOutgoingSimpitMessageType : public OutgoingSimpitMessageType
 {
-private: 
-    T _latest;
- 
 public:
-    static const OutgoingSimpitMessageType<T> PROGMEM Instance;
-
-    static const byte MessageTypeId;
-
-    OutgoingSimpitMessageType() : BaseOutgoingSimpitMessageType(OutgoingSimpitMessageType<T>::MessageTypeId, SimpitMessageTypeEnum::Outgoing)
-    {
-        _latest = T();
-    }
+    static GenericOutgoingSimpitMessageType<T> PROGMEM Instance;
 
     void Publish(SerialPort* serial, T* data)
     {

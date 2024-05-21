@@ -52,7 +52,7 @@ testF(SimpitTests, read_incoming_message)
     // 3. Write Checksum
     // 4. COBS encode
     SimpitStream stream = SimpitStream();
-    stream.Write(IncomingSimpitMessageType<TestMessage>::MessageTypeId);
+    stream.Write(GenericIncomingSimpitMessageType<TestMessage>::MessageTypeId);
     stream.Write(&this->data, sizeof(TestMessage));
     stream.Write(CheckSum::CalculateCheckSum(stream));
     assertTrue(COBS::TryEncode(stream));
