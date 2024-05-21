@@ -1,5 +1,6 @@
 #include "SimpitBuilder.h"
 #include "CoreSimpitMessageTypeIds.h"
+#include "SimpitAddon.h"
 
 SIMPIT_DECLARE_OUTGOING_TYPE(EchoRequest, SIMPIT_CORE_OUTGOING_ECHO_REQUEST_ID);
 SIMPIT_DECLARE_OUTGOING_TYPE(EchoResponse, SIMPIT_CORE_OUTGOING_ECHO_RESPONSE_ID);
@@ -16,6 +17,14 @@ SimpitBuilder::SimpitBuilder()
     _messageTypes = new SimpitMessageTypeProvider(512);
 
     this->RegisterOutgoing<CustomLog>();
+}
+
+SimpitBuilder SimpitBuilder::RegisterAddon(SimpitAddon *addon)
+{
+    addon->Register(*this);
+    delete addon;
+
+    return *this;
 }
 
 Simpit* SimpitBuilder::Build(Stream &serial)

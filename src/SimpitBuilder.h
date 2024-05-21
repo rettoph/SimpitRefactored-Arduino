@@ -8,6 +8,8 @@
 #include "SimpitMessageTypeProvider.h"
 #include "function_objects.h"
 
+class SimpitAddon;
+
 class SimpitBuilder
 {
 private:
@@ -41,6 +43,8 @@ public:
 
         return *this;
     }
+
+    SimpitBuilder RegisterAddon(SimpitAddon *addon);
 
     Simpit* Build(Stream &serial);
 };
