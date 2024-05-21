@@ -82,7 +82,7 @@ int Simpit::ReadIncoming()
             continue;
         }
 
-        BaseSimpitMessageType* messageType;
+        const BaseSimpitMessageType* messageType;
         if(_messageTypes->TryGetMessageType(id, SimpitMessageTypeEnum::Incoming, *&messageType) == false)
         { // Unknown message type id
             this->Log("Simpit-Arduino: Unknown message: " + id);

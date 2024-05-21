@@ -51,32 +51,32 @@ public:
   class Incoming
   {
   public:
-    struct Altitude
+    struct __attribute__((packed)) Altitude
     {
       float Alt;
       float SurfAlt;
-    } __attribute__((packed));
+    };
 
-    struct Apsides
+    struct __attribute__((packed)) Apsides
     {
       float Periapsis;
       float Apoapsis;
-    } __attribute__((packed));
+    };
 
-    struct ApsidesTime
+    struct __attribute__((packed)) ApsidesTime
     {
       int Periapsis;
       int Apoapsis;
-    } __attribute__((packed));
+    };
 
-    struct Velocity
+    struct __attribute__((packed)) Velocity
     {
       float Orbital;
       float Surface;
       float Vertical;
-    } __attribute__((packed));
+    };
 
-    struct Rotation
+    struct __attribute__((packed)) Rotation
     {
       float Heading;
       float Pitch;
@@ -85,9 +85,9 @@ public:
       float OrbitalVelocityPitch;
       float SurfaceVelocityHeading;
       float SurfaceVelocityPitch;
-    } __attribute__((packed));
+    };
 
-    struct OrbitInfo
+    struct __attribute__((packed)) OrbitInfo
     {
       float Eccentricity;
       float SemiMajorAxis;
@@ -97,16 +97,16 @@ public:
       float TrueAnomaly;
       float MeanAnomaly;
       float Period;
-    } __attribute__((packed));
+    };
 
-    struct Airspeed
+    struct __attribute__((packed)) Airspeed
     {
       float IndicatedAirSpeed;
       float MachNumber;
       float GeeForce;
-    } __attribute__((packed));
+    };
 
-    struct Maneuver
+    struct __attribute__((packed)) Maneuver
     {
       float TimeToNextManeuver;
       float DeltaVNextManeuver;
@@ -114,153 +114,153 @@ public:
       float DeltaVTotal;
       float HeadingNextManeuver;
       float PitchNextManeuver;
-    } __attribute__((packed));
+    };
 
-    struct SASInfo
+    struct __attribute__((packed)) SASInfo
     {
       AutoPilotModeEnum CurrentSASMode;
       AutoPilotModeFlags SASModeAvailability;
-    } __attribute__((packed));
+    };
 
-    struct RotationCmd
+    struct __attribute__((packed)) RotationCmd
     {
       short Pitch;
       short Roll;
       short Yaw;
       byte Mask;
-    } __attribute__((packed));
+    };
 
-    struct TranslationCmd
+    struct __attribute__((packed)) TranslationCmd
     {
       short X;
       short Y;
       short Z;
       byte Mask;
-    } __attribute__((packed));
+    };
 
-    struct WheelCmd
+    struct __attribute__((packed)) WheelCmd
     {
       short Steer;
       short Throttle;
       byte Mask;
-    } __attribute__((packed));
+    };
 
-    struct ThrottleCmd
+    struct __attribute__((packed)) ThrottleCmd
     {
       short Value;
-    } __attribute__((packed));
+    };
 
-    struct ActionGroups
+    struct __attribute__((packed)) ActionGroups
     {
       ActionGroupFlags Flags;
-    } __attribute__((packed));
+    };
 
-    struct DeltaV
+    struct __attribute__((packed)) DeltaV
     {
       float StageDeltaV;
       float TotalDeltaV;
-    } __attribute__((packed));
+    };
 
-    struct DeltaVEnv
+    struct __attribute__((packed)) DeltaVEnv
     {
       float StageDeltaVASL;
       float TotalDeltaVASL;
       float StageDeltaVVac;
       float TotalDeltaVVac;
-    } __attribute__((packed));
+    };
 
-    struct BurnTime
+    struct __attribute__((packed)) BurnTime
     {
       float StageBurnTime;
       float TotalBurnTime;
-    } __attribute__((packed));
+    };
 
-    struct CustomActionGroups
+    struct __attribute__((packed)) CustomActionGroups
     {
       byte Status[32];
-    } __attribute__((packed));
+    };
 
-    struct TempLimit
+    struct __attribute__((packed)) TempLimit
     {
       byte TempLimitPercentage;
       byte SkinTempLimitPercentage;
-    } __attribute__((packed));
+    };
   };
 
   class Outgoing
   {
   public:
-    struct CustomActionGroupEnable
+    struct __attribute__((packed)) CustomActionGroupEnable
     {
       byte GroupIds[32];
-    } __attribute__((packed));
+    };
 
-    struct CustomActionGroupDisable
+    struct __attribute__((packed)) CustomActionGroupDisable
     {
       byte GroupIds[32];
-    } __attribute__((packed));
+    };
 
-    struct CustomActionGroupToggle
+    struct __attribute__((packed)) CustomActionGroupToggle
     {
       byte GroupIds[32];
-    } __attribute__((packed));
+    };
 
-    struct ActionGroupActivate
+    struct __attribute__((packed)) ActionGroupActivate
     {
       ActionGroupFlags Flags;
-    } __attribute__((packed));
+    };
 
-    struct ActionGroupDeactivate
+    struct __attribute__((packed)) ActionGroupDeactivate
     {
       ActionGroupFlags Flags;
-    } __attribute__((packed));
+    };
 
-    struct ActionGroupToggle
+    struct __attribute__((packed)) ActionGroupToggle
     {
       ActionGroupFlags Flags;
-    } __attribute__((packed));
+    };
 
-    struct Rotation
+    struct __attribute__((packed)) Rotation
     {
       short Pitch;
       short Roll;
       short Yaw;
       byte Mask;
-    } __attribute__((packed));
+    };
 
-    struct Translation
+    struct __attribute__((packed)) Translation
     {
       short X;
       short Y;
       short Z;
       byte Mask;
-    } __attribute__((packed));
+    };
 
-    struct WheelControl
+    struct __attribute__((packed)) WheelControl
     {
       short Steer;
       short Throttle;
       byte Mask;
-    } __attribute__((packed));
+    };
 
-    struct Throttle
+    struct __attribute__((packed)) Throttle
     {
       short Value;
-    } __attribute__((packed));
+    };
 
-    struct AutopilotMode
+    struct __attribute__((packed)) AutopilotMode
     {
       AutoPilotModeEnum Value;
-    } __attribute__((packed));
+    };
 
-    struct CustomAxix
+    struct __attribute__((packed)) CustomAxix
     {
       short Custom1;
       short Custom2;
       short Custom3;
       short Custom4;
       byte Mask;
-    } __attribute__((packed));
+    };
   };
 };
 
@@ -270,7 +270,7 @@ public:
   class Outgoing
   {
   public:
-    struct CameraMode
+    struct __attribute__((packed)) CameraMode
     {
       enum struct ValueEnum : byte
       {
@@ -286,27 +286,27 @@ public:
         PreviousCamera = 51,
         NextCameraModeState = 52,
         PreviousCameraModeState = 53
-      } __attribute__((packed));
+      };
 
       ValueEnum Value;
-    } __attribute__((packed));
+    };
 
-    struct CameraRotation
+    struct __attribute__((packed)) CameraRotation
     {
       short Pitch;
       short Roll;
       short Yaw;
       short Zoom;
       byte Mask;
-    } __attribute__((packed));
+    };
 
-    struct CameraTranslation
+    struct __attribute__((packed)) CameraTranslation
     {
       short X;
       short Y;
       short Z;
       byte Mask;
-    } __attribute__((packed));
+    };
   };
 };
 
@@ -316,7 +316,7 @@ public:
   class Incoming
   {
   public:
-    struct TargetInfo
+    struct __attribute__((packed)) TargetInfo
     {
       float Distance;
       float Velocity;
@@ -324,25 +324,25 @@ public:
       float Pitch;
       float VelocityHeading;
       float VelocityPitch;
-    } __attribute__((packed));
+    };
 
-    struct SoIName
+    struct __attribute__((packed)) SoIName
     {
       FixedString Value;
-    } __attribute__((packed));
+    };
 
-    struct SceneChange
+    struct __attribute__((packed)) SceneChange
     {
       enum struct SceneChangeTypeEnum
       {
         Flight = 0x0,
         NotFlight = 0x1
-      } __attribute__((packed));
+      };
 
       SceneChangeTypeEnum Type;
-    } __attribute__((packed));
+    };
 
-    struct FlightStatus
+    struct __attribute__((packed)) FlightStatus
     {
       enum struct StatusFlags : byte
       {
@@ -353,7 +353,7 @@ public:
         ComnetControlLevel0 = 16,
         ComnetControlLevel1 = 32,
         HasTargetSet = 64
-      } __attribute__((packed));
+      };
 
       StatusFlags Status;
       byte VesselSituation; // See Vessel.Situations for possible values
@@ -363,9 +363,9 @@ public:
       byte CommNetSignalStrenghPercentage;
       byte CurrentStage;
       byte VesselType;
-    } __attribute__((packed));
+    };
 
-    struct AtmoCondition
+    struct __attribute__((packed)) AtmoCondition
     {
       enum struct AtmoCharacteristicsFlags : byte
       {
@@ -373,30 +373,30 @@ public:
         HasAtmosphere = 1,
         HasOxygen = 2,
         IsVesselInAtmosphere = 4
-      } __attribute__((packed));
+      };
 
       AtmoCharacteristicsFlags AtmoCharacteristics;
       float AirDensity;
       float Temperature;
       float Pressure;
-    } __attribute__((packed));
+    };
 
-    struct VesselName
+    struct __attribute__((packed)) VesselName
     {
       FixedString Value;
-    } __attribute__((packed));
+    };
 
-    struct VesselChange
+    struct __attribute__((packed)) VesselChange
     {
       enum struct TypeEnum : byte
       {
         Switching = 1,
         Docking = 2,
         Undocking = 3
-      } __attribute__((packed));
+      };
 
       TypeEnum Type;
-    } __attribute__((packed));
+    };
   };
 };
 
@@ -406,7 +406,7 @@ class Input
   class Outgoing
   {
     public:
-    struct KeyboardEmulator
+    struct __attribute__((packed)) KeyboardEmulator
     {
       enum struct ModifierFlags : byte
       {
@@ -415,11 +415,11 @@ class Input
         ALT_MOD = 4,
         KEY_DOWN_MOD = 8,
         KEY_UP_MOD = 16
-      } __attribute__((packed));
+      };
 
       ModifierFlags Modifier;
       short Key;
-    } __attribute__((packed));
+    };
   };
 };
 
@@ -429,11 +429,11 @@ public:
   class Outgoing
   {
   public:
-      struct NavballMode
+      struct __attribute__((packed)) NavballMode
     {
       // TODO: Check if any data is actually transmitted with this message
       // If there is, it seems unnecessary
-    } __attribute__((packed));
+    };
   };
 };
 
@@ -443,103 +443,103 @@ public:
   class Incoming
   {
   public:
-    struct LiquidFuel
+    struct __attribute__((packed)) LiquidFuel
     {
       float Max;
       float Available;
-    } __attribute__((packed));
+    };
 
-    struct LiquidFuelStage
+    struct __attribute__((packed)) LiquidFuelStage
     {
       float Max;
       float Available;
-    } __attribute__((packed));
+    };
 
-    struct Methane
+    struct __attribute__((packed)) Methane
     {
       float Max;
       float Available;
-    } __attribute__((packed));
+    };
 
-    struct MethaneStage
+    struct __attribute__((packed)) MethaneStage
     {
       float Max;
       float Available;
-    } __attribute__((packed));
+    };
 
-    struct Oxidizer
+    struct __attribute__((packed)) Oxidizer
     {
       float Max;
       float Available;
-    } __attribute__((packed));
+    };
 
-    struct OxidizerStage
+    struct __attribute__((packed)) OxidizerStage
     {
       float Max;
       float Available;
-    } __attribute__((packed));
+    };
 
-    struct SolidFuel
+    struct __attribute__((packed)) SolidFuel
     {
       float Max;
       float Available;
-    } __attribute__((packed));
+    };
 
-    struct SolidFuelStage
+    struct __attribute__((packed)) SolidFuelStage
     {
       float Max;
       float Available;
-    } __attribute__((packed));
+    };
 
-    struct XenonGas
+    struct __attribute__((packed)) XenonGas
     {
       float Max;
       float Available;
-    } __attribute__((packed));
+    };
 
-    struct XenonGasStage
+    struct __attribute__((packed)) XenonGasStage
     {
       float Max;
       float Available;
-    } __attribute__((packed));
+    };
 
-    struct MonoPropellant
+    struct __attribute__((packed)) MonoPropellant
     {
       float Max;
       float Available;
-    } __attribute__((packed));
+    };
 
-    struct EvaPropellant
+    struct __attribute__((packed)) EvaPropellant
     {
       float Max;
       float Available;
-    } __attribute__((packed));
+    };
 
-    struct ElectricCharge
+    struct __attribute__((packed)) ElectricCharge
     {
       float Max;
       float Available;
-    } __attribute__((packed));
+    };
 
-    struct Ore
+    struct __attribute__((packed)) Ore
     {
       float Max;
       float Available;
-    } __attribute__((packed));
+    };
 
-    struct Ablator
+    struct __attribute__((packed)) Ablator
     {
       float Max;
       float Available;
-    } __attribute__((packed));
+    };
 
-    struct AblatorStage
+    struct __attribute__((packed)) AblatorStage
     {
       float Max;
       float Available;
-    } __attribute__((packed));
+    };
 
-    struct CustomResourceOne
+    struct __attribute__((packed)) CustomResourceOne
     {
       float CurrentResource1;
       float MaxResource1;
@@ -549,9 +549,9 @@ public:
       float MaxResource3;
       float CurrentResource4;
       float MaxResource4;
-    } __attribute__((packed));
+    };
 
-    struct CustomResourceTwo
+    struct __attribute__((packed)) CustomResourceTwo
     {
       float CurrentResource1;
       float MaxResource1;
@@ -561,7 +561,7 @@ public:
       float MaxResource3;
       float CurrentResource4;
       float MaxResource4;
-    } __attribute__((packed));
+    };
   };
 };
 
@@ -571,7 +571,7 @@ class Warp
   class Outgoing
   {
   public:
-    struct WarpChange
+    struct __attribute__((packed)) WarpChange
     {
       enum struct RateEnum : byte
       {
@@ -590,12 +590,12 @@ class Warp
         WarpRateUp = 12,
         WarpRateDown = 13,
         WarpCancelAutoWarp = 255,
-      } __attribute__((packed));
+      };
 
       RateEnum Rate;
-    } __attribute__((packed));
+    };
 
-    struct TimewarpTo
+    struct __attribute__((packed)) TimewarpTo
     {
       enum struct InstanceEnum : byte
       {
@@ -606,11 +606,11 @@ class Warp
         TimewarpToApoapsis = 4,
         TimewarpToPeriapsis = 5,
         TimewarpToNextMorning = 6
-      } __attribute__((packed));
+      };
 
       InstanceEnum Instant;
       float Delay; // negative for warping before the instant
-    } __attribute__((packed));
+    };
   };
 };
 

@@ -152,7 +152,6 @@ class KerbalSimpitAddon : public SimpitAddon
             .RegisterOutgoing<Warp::Outgoing::TimewarpTo>()
             .RegisterOutgoing<NavBall::Outgoing::NavballMode>()
             .RegisterOutgoing<Input::Outgoing::KeyboardEmulator>();
-
     }
 };
 

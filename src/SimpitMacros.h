@@ -11,15 +11,17 @@
 
 
 #define SIMPIT_DECLARE_INCOMING_TYPE(TYPE, MESSAGE_ID) \
-    template class IncomingSimpitMessageType<TYPE>; \
+    template struct IncomingSimpitMessageType<TYPE>; \
     template<> const byte IncomingSimpitMessageType<TYPE>::MessageTypeId = MESSAGE_ID; \
+    template<> const IncomingSimpitMessageType<TYPE> IncomingSimpitMessageType<TYPE>::Instance = IncomingSimpitMessageType<TYPE>(); \
     template bool SimpitMessageTypeProvider::TryRegisterIncoming<TYPE>(); \
     template SimpitBuilder SimpitBuilder::RegisterIncoming<TYPE>(); \
     template SimpitBuilder SimpitBuilder::RegisterIncomingHandler<TYPE>(FunctionObject<void(void*, TYPE*)> handler);
 
 #define SIMPIT_DECLARE_OUTGOING_TYPE(TYPE, MESSAGE_ID) \
-    template class OutgoingSimpitMessageType<TYPE>; \
+    template struct OutgoingSimpitMessageType<TYPE>; \
     template<> const byte OutgoingSimpitMessageType<TYPE>::MessageTypeId = MESSAGE_ID; \
+    template<> const OutgoingSimpitMessageType<TYPE> OutgoingSimpitMessageType<TYPE>::Instance = OutgoingSimpitMessageType<TYPE>(); \
     template bool SimpitMessageTypeProvider::TryRegisterOutgoing<TYPE>(); \
     template SimpitBuilder SimpitBuilder::RegisterOutgoing<TYPE>(); \
     template void Simpit::WriteOutgoing<TYPE>(TYPE data);

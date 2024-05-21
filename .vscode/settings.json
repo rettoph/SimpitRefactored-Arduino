@@ -17,5 +17,6 @@
     ],
     "files.associations": {
         "simpitmessagesubscriber": "c"
-    }
+    },
+    "memory-view.showMemoryPanel": true
 }

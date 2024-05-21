@@ -12,7 +12,7 @@ enum struct SimpitMessageTypeEnum {
     Outgoing 
 };
 
-class BaseSimpitMessageType
+struct BaseSimpitMessageType
 {
 public:
     byte Id;
@@ -21,7 +21,7 @@ public:
     BaseSimpitMessageType(byte id, SimpitMessageTypeEnum type);
 };
 
-class BaseIncomingSimpitMessageType : public BaseSimpitMessageType
+struct BaseIncomingSimpitMessageType : public BaseSimpitMessageType
 {
 public:
     BaseIncomingSimpitMessageType(byte id, SimpitMessageTypeEnum type) : BaseSimpitMessageType(id, type)
@@ -32,20 +32,22 @@ public:
     virtual void Publish(void* sender, SimpitStream incoming) = 0;
 };
 
-template<typename T> class IncomingSimpitMessageType : public BaseIncomingSimpitMessageType
+template<typename T> struct IncomingSimpitMessageType : public BaseIncomingSimpitMessageType
 {
 private: 
     bool _hasHandler;
     FunctionObject<void(void*, T*)> _handler;
-    T* _latest;
+    T _latest;
  
 public:
+    static const IncomingSimpitMessageType<T> PROGMEM Instance;
+
     static const byte MessageTypeId;
 
-    IncomingSimpitMessageType(byte id, SimpitMessageTypeEnum type) : BaseIncomingSimpitMessageType(id, type)
+    IncomingSimpitMessageType() : BaseIncomingSimpitMessageType(IncomingSimpitMessageType<T>::MessageTypeId, SimpitMessageTypeEnum::Incoming)
     {
         _hasHandler = false;
-        _latest = (T*)malloc(sizeof(T));
+        _latest = T();
     }
 
     void Publish(void* sender, SimpitStream incoming) override
@@ -56,13 +58,13 @@ public:
             return;
         }
 
-        if(incoming.TryReadBytes(sizeof(T), _latest) == false)
+        if(incoming.TryReadBytes(sizeof(T), &_latest) == false)
         {
             incoming.Clear();
             return;
         }
 
-        _handler(sender, _latest);
+        _handler(sender, &_latest);
     }
 
     void RegisterHandler(FunctionObject<void(void*, T*)> handler)
@@ -72,7 +74,7 @@ public:
     }
 };
 
-class BaseOutgoingSimpitMessageType : public BaseSimpitMessageType
+struct BaseOutgoingSimpitMessageType : public BaseSimpitMessageType
 {
 public:
     BaseOutgoingSimpitMessageType(byte id, SimpitMessageTypeEnum type) : BaseSimpitMessageType(id, type)
@@ -81,17 +83,19 @@ public:
     }
 };
 
-template<typename T> class OutgoingSimpitMessageType : public BaseOutgoingSimpitMessageType
+template<typename T> struct OutgoingSimpitMessageType : public BaseOutgoingSimpitMessageType
 {
 private: 
-    T* _latest;
+    T _latest;
  
 public:
+    static const OutgoingSimpitMessageType<T> PROGMEM Instance;
+
     static const byte MessageTypeId;
 
-    OutgoingSimpitMessageType(byte id, SimpitMessageTypeEnum type) : BaseOutgoingSimpitMessageType(id, type)
+    OutgoingSimpitMessageType() : BaseOutgoingSimpitMessageType(OutgoingSimpitMessageType<T>::MessageTypeId, SimpitMessageTypeEnum::Outgoing)
     {
-        _latest = (T*)malloc(sizeof(T));
+        _latest = T();
     }
 
     void Publish(SerialPort* serial, T* data)

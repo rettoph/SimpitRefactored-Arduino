@@ -13,41 +13,41 @@ enum struct SynchronisationMessageTypeEnum : byte
     ACK = 0x2
 };
 
-struct Synchronisation
+struct __attribute__((packed)) Synchronisation
 {
     SynchronisationMessageTypeEnum Type;
     FixedString Version;
-} __attribute__((packed));
+};
 
-struct Handshake
+struct __attribute__((packed)) Handshake
 {
     byte HandshakeType;
     byte Payload;
-} __attribute__((packed));
+};
 
-struct EchoRequest
+struct __attribute__((packed)) EchoRequest
 {
     byte MessageTypeIds[SIMPIT_CORE_MESSAGE_TYPE_BUFFER_SIZE];
-} __attribute__((packed));
+};
 
-struct EchoResponse
+struct __attribute__((packed)) EchoResponse
 {
     byte MessageTypeIds[SIMPIT_CORE_MESSAGE_TYPE_BUFFER_SIZE];
-} __attribute__((packed));
+};
 
-struct CloseSerialPort
+struct __attribute__((packed)) CloseSerialPort
 {
-} __attribute__((packed));
+};
 
-struct RegisterHandler
-{
-    byte MessageTypeIds[SIMPIT_CORE_MESSAGE_TYPE_BUFFER_SIZE];
-} __attribute__((packed));
-
-struct DeregisterHandler
+struct __attribute__((packed)) RegisterHandler
 {
     byte MessageTypeIds[SIMPIT_CORE_MESSAGE_TYPE_BUFFER_SIZE];
-} __attribute__((packed));
+};
+
+struct __attribute__((packed)) DeregisterHandler
+{
+    byte MessageTypeIds[SIMPIT_CORE_MESSAGE_TYPE_BUFFER_SIZE];
+};
 
 enum struct CustomLogFlags : byte
 {
@@ -57,15 +57,15 @@ enum struct CustomLogFlags : byte
     NoHeader = 4
 };
 
-struct CustomLog
+struct __attribute__((packed)) CustomLog
 {
     CustomLogFlags Flags;
     FixedString Value;
-} __attribute__((packed));
+};
 
-struct Request
+struct __attribute__((packed)) Request
 {
     byte MessageTypeId;
-} __attribute__((packed));
+};
 
 #endif

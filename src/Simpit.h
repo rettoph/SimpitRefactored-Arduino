@@ -37,7 +37,7 @@ public:
 
     template<typename T> void WriteOutgoing(T data)
     {
-        BaseSimpitMessageType* messageType;
+        const BaseSimpitMessageType* messageType;
         if(_messageTypes->TryGetMessageType(OutgoingSimpitMessageType<T>::MessageTypeId, SimpitMessageTypeEnum::Outgoing, *&messageType) == false)
         {
             return; // TODO: Some sort of error handling here

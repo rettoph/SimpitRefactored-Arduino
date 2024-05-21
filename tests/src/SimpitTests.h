@@ -6,6 +6,7 @@
 #include <CheckSum.h>
 #include <COBS.h>
 #include <MemStream.h>
+#include <KerbalSimpitAddon.h>
 
 using namespace aunit;
 
@@ -30,7 +31,7 @@ testF(SimpitTests, read_incoming_message)
     byte buffer[256];
     Stream* serial = new MemStream(buffer, 256, 0, true);
 
-    Simpit* simpit = SimpitBuilder().RegisterIncoming<TestMessage>()
+    Simpit* simpit = SimpitBuilder().RegisterAddon(new KerbalSimpitAddon()).RegisterIncoming<TestMessage>()
         .RegisterIncomingHandler<TestMessage>([this](void *sender, TestMessage *data) {
             assertNotEqual(this->data->Value1, this->data->Value2);
 

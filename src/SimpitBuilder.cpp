@@ -29,7 +29,6 @@ SimpitBuilder SimpitBuilder::RegisterAddon(SimpitAddon *addon)
 
 Simpit* SimpitBuilder::Build(Stream &serial)
 {
-    _messageTypes->Trim();
     Simpit* simpit = new Simpit(_messageTypes, serial);
 
     return simpit;
