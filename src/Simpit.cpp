@@ -65,6 +65,9 @@ bool Simpit::Init(byte response)
     synchronisation.Type = SynchronisationMessageTypeEnum::ACK;
     _serial->TryWriteOutgoing(SIMPIT_CORE_OUTGOING_SYNCHRONISATION_ID, &synchronisation, sizeof(Synchronisation));
 
+    int totalAlloc = sizeof(this) + _messageTypes->GetIncomingAlloc() + _messageTypes->GetOutgoingAlloc() + sizeof(SimpitMessageTypeProvider);
+    this->Log("Simpit Runtime Alloc: " + String(totalAlloc), CustomLogFlags::Verbose);
+
     return true;
 }
 

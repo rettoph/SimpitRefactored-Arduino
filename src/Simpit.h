@@ -69,7 +69,7 @@ public:
         return (T*)incoming->GetLatest();
     }
 
-    template<typename T> void SubscribeIncoming(bool request = false)
+    template<typename T> bool SubscribeIncoming()
     {
         int index = 0;
         for(int i=0; i < SIMPIT_CORE_MESSAGE_TYPE_BUFFER_SIZE; i++)
@@ -77,17 +77,15 @@ public:
             if(_register->MessageTypeIds[i] == 0x0)
             {
                 _register->MessageTypeIds[i] = GenericIncomingSimpitMessageType<T>::MessageTypeId;
-                break;
+                this->RequestIncoming<T>();
+                return true;
             }
         }
 
-        if(request == true)
-        {
-            this->RequestIncoming<T>();
-        }
+        return false;
     }
 
-    template<typename T> void UnsubscribeIncoming()
+    template<typename T> bool UnsubscribeIncoming()
     {
         int index = 0;
         for(int i=0; i < SIMPIT_CORE_MESSAGE_TYPE_BUFFER_SIZE; i++)
@@ -95,9 +93,11 @@ public:
             if(_deregister->MessageTypeIds[i] == 0x0)
             {
                 _deregister->MessageTypeIds[i] = GenericIncomingSimpitMessageType<T>::MessageTypeId;
-                break;
+                return true;
             }
         }
+
+        return false;
     }
 
     template<typename T> void RequestIncoming()

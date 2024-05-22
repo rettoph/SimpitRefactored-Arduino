@@ -8,9 +8,11 @@
 class SimpitMessageTypeProvider
 {
 private:
+    uint16_t _incomingAlloc;
     byte _incomingCount;
     IncomingSimpitMessageType **_incoming;
 
+    uint16_t _outgoingAlloc;
     byte _outgoingCount;
     OutgoingSimpitMessageType **_outgoing;
 
@@ -40,6 +42,7 @@ public:
 
         GenericIncomingSimpitMessageType<T>* type = new GenericIncomingSimpitMessageType<T>(GenericIncomingSimpitMessageType<T>::MessageTypeId, handler);
         _incoming[_incomingCount++] = (IncomingSimpitMessageType*)type;
+        _incomingAlloc += sizeof(GenericIncomingSimpitMessageType<T>);
 
         return true;
     }
@@ -60,9 +63,13 @@ public:
 
         GenericOutgoingSimpitMessageType<T>* type = new GenericOutgoingSimpitMessageType<T>(GenericOutgoingSimpitMessageType<T>::MessageTypeId, delta);
         _outgoing[_outgoingCount++] = (OutgoingSimpitMessageType*)type;
+        _outgoingAlloc += sizeof(GenericOutgoingSimpitMessageType<T>);
 
         return true;
     }
+
+    uint16_t GetIncomingAlloc() { return _incomingAlloc; }
+    uint16_t GetOutgoingAlloc() { return _outgoingAlloc; }
 };
 
 #endif
