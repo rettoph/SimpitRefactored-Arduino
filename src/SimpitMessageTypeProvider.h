@@ -42,7 +42,7 @@ public:
         return true;
     }
 
-    template<typename T> bool TryRegisterOutgoing()
+    template<typename T> bool TryRegisterOutgoing(bool(*equality)(T, T))
     {
         if(_outgoingCount > 0 && _outgoingCount % SimpitMessageTypeProvider_BufferIncrement == 0)
         { // Time to resize the outgoing buffer
@@ -56,7 +56,7 @@ public:
             _outgoing = newOutgoing;
         }
 
-        GenericOutgoingSimpitMessageType<T>* type = new GenericOutgoingSimpitMessageType<T>(GenericOutgoingSimpitMessageType<T>::MessageTypeId);
+        GenericOutgoingSimpitMessageType<T>* type = new GenericOutgoingSimpitMessageType<T>(GenericOutgoingSimpitMessageType<T>::MessageTypeId, equality);
         _outgoing[_outgoingCount++] = (OutgoingSimpitMessageType*)type;
 
         return true;

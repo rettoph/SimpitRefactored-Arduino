@@ -38,6 +38,11 @@ public:
         incoming.TryReadBytes(sizeof(T), &_latest);
         _handler(sender, &_latest);
     }
+
+    T* GetLatest()
+    {
+        return &_latest;
+    }
 };
 
 struct OutgoingSimpitMessageType
@@ -49,21 +54,40 @@ struct OutgoingSimpitMessageType
         this->Id = id;
     }
 
-    virtual void Publish(SerialPort* serial, void* data) const = 0;
+    virtual void Publish(SerialPort* serial, void* data) = 0;
 };
 
 template<typename T> struct GenericOutgoingSimpitMessageType : public OutgoingSimpitMessageType
 {
+private:
+    T _latest;
+    bool(*_equality)(T, T);
+
+public:
     static const byte MessageTypeId;
 
-    GenericOutgoingSimpitMessageType(byte id) : OutgoingSimpitMessageType(id)
+    GenericOutgoingSimpitMessageType(byte id, bool(*equality)(T, T)) : OutgoingSimpitMessageType(id)
     {
-        
+        _latest = T();
+        _equality = equality;
     }
 
-    void Publish(SerialPort* serial, void* data) const override
+    void Publish(SerialPort* serial, void* data) override
     {
+        T* casted = (T*)data;
+        if(_equality(_latest, *casted) == true)
+        { // Equality check returned true, duplicate data?
+            return;
+        }
+
         serial->TryWriteOutgoing(this->Id, (void*)data, sizeof(T));
+
+        memccpy(casted, &_latest, 0, sizeof(T));
+    }
+
+    T* GetLatest()
+    {
+        return &_latest;
     }
 };
 

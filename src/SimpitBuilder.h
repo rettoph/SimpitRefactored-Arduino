@@ -25,7 +25,14 @@ public:
 
     template<typename T> SimpitBuilder RegisterOutgoing()
     {
-        _messageTypes->TryRegisterOutgoing<T>();
+        return this->RegisterOutgoing<T>([](T a, T b) {
+            return memcmp(&a, &b, sizeof(T)) == 0;
+        });
+    }
+
+    template<typename T> SimpitBuilder RegisterOutgoing(bool(*equality)(T, T))
+    {
+        _messageTypes->TryRegisterOutgoing<T>(equality);
         return *this;
     }
 

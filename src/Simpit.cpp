@@ -10,6 +10,8 @@ Simpit::Simpit(SimpitMessageTypeProvider *messageTypes, Stream &serial)
 {
     _messageTypes = messageTypes;
     _serial = new SerialPort(serial);
+    _register = new RegisterHandler();
+    _deregister = new DeregisterHandler();
 }
 
 bool Simpit::Init(byte response)

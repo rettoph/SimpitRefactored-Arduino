@@ -12,6 +12,8 @@ private:
     SimpitMessageTypeProvider *_messageTypes;
     SerialPort* _serial;
     SimpitStream _buffer;
+    RegisterHandler *_register;
+    DeregisterHandler *_deregister;
 
 public:
   /** Default constructor. Usually called via SimpitBuilder::Build()
