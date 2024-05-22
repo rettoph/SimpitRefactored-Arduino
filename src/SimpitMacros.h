@@ -8,16 +8,9 @@
 #include "function_objects.h"
 
 #define SIMPIT_DECLARE_INCOMING_TYPE(TYPE, MESSAGE_TYPE_ID) \
-    template struct GenericIncomingSimpitMessageType<TYPE>; \
-    template<> const byte GenericIncomingSimpitMessageType<TYPE>::MessageTypeId = MESSAGE_TYPE_ID; \
-    template bool SimpitMessageTypeProvider::TryRegisterIncoming<TYPE>(void(*handler)(void*, TYPE*)); \
-    template SimpitBuilder SimpitBuilder::RegisterIncoming<TYPE>(void(*handler)(void*, TYPE*));
+    template<> const byte GenericIncomingSimpitMessageType<TYPE>::MessageTypeId = MESSAGE_TYPE_ID;
 
 #define SIMPIT_DECLARE_OUTGOING_TYPE(TYPE, MESSAGE_TYPE_ID) \
-    template struct GenericOutgoingSimpitMessageType<TYPE>; \
-    template<> const byte GenericOutgoingSimpitMessageType<TYPE>::MessageTypeId = MESSAGE_TYPE_ID; \
-    template bool SimpitMessageTypeProvider::TryRegisterOutgoing<TYPE>(); \
-    template SimpitBuilder SimpitBuilder::RegisterOutgoing<TYPE>(); \
-    template void Simpit::WriteOutgoing<TYPE>(TYPE data);
+    template<> const byte GenericOutgoingSimpitMessageType<TYPE>::MessageTypeId = MESSAGE_TYPE_ID;
 
 #endif
