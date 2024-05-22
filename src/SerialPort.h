@@ -9,8 +9,7 @@ class SerialPort
 
 private:
     Stream *_serial;
-    SimpitStream *_incoming;
-    SimpitStream *_outgoing;
+    SimpitStream _buffer;
 
 public:
     SerialPort(Stream &serial);

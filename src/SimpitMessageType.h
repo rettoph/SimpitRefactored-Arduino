@@ -14,12 +14,17 @@ struct IncomingSimpitMessageType
         this->Id = id;
     }
 
-    virtual void Publish(void* sender, SimpitStream incoming) = 0;
+    virtual bool TryPublish(void* sender) = 0;
+
+    virtual void SetLatest(SimpitStream incoming) = 0;
+
+    virtual void* GetLatest() = 0;
 };
 
 template<typename T> struct GenericIncomingSimpitMessageType : public IncomingSimpitMessageType
 {
 private:
+    bool _dirty;
     T _latest;
     void(*_handler)(void*, T*);
 
@@ -29,17 +34,30 @@ public:
     GenericIncomingSimpitMessageType(byte id, void(*handler)(void*, T*)) : IncomingSimpitMessageType(id)
     {
         _handler = handler;
+        _dirty = false;
 
         this->Id = id;
     }
 
-    void Publish(void* sender, SimpitStream incoming) override
+    bool TryPublish(void* sender) override
     {
-        incoming.TryReadBytes(sizeof(T), &_latest);
+        if(_dirty == false)
+        {
+            return false;
+        }
+
         _handler(sender, &_latest);
+        _dirty = false;
+        return true;
     }
 
-    T* GetLatest()
+    void SetLatest(SimpitStream incoming) override
+    {
+        incoming.TryReadBytes(sizeof(T), &_latest);
+        _dirty = true;
+    }
+
+    void* GetLatest() override
     {
         return &_latest;
     }
@@ -55,28 +73,30 @@ struct OutgoingSimpitMessageType
     }
 
     virtual void Publish(SerialPort* serial, void* data) = 0;
+
+    virtual void* GetLatest() = 0;
 };
 
 template<typename T> struct GenericOutgoingSimpitMessageType : public OutgoingSimpitMessageType
 {
 private:
     T _latest;
-    bool(*_equality)(T, T);
+    bool(*_delta)(T, T);
 
 public:
     static const byte MessageTypeId;
 
-    GenericOutgoingSimpitMessageType(byte id, bool(*equality)(T, T)) : OutgoingSimpitMessageType(id)
+    GenericOutgoingSimpitMessageType(byte id, bool(*delta)(T, T)) : OutgoingSimpitMessageType(id)
     {
         _latest = T();
-        _equality = equality;
+        _delta = delta;
     }
 
     void Publish(SerialPort* serial, void* data) override
     {
         T* casted = (T*)data;
-        if(_equality(_latest, *casted) == true)
-        { // Equality check returned true, duplicate data?
+        if(_delta(_latest, *casted) == false)
+        { // No change detected
             return;
         }
 
@@ -85,7 +105,7 @@ public:
         memccpy(casted, &_latest, 0, sizeof(T));
     }
 
-    T* GetLatest()
+    void* GetLatest() override
     {
         return &_latest;
     }

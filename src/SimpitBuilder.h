@@ -26,13 +26,13 @@ public:
     template<typename T> SimpitBuilder RegisterOutgoing()
     {
         return this->RegisterOutgoing<T>([](T a, T b) {
-            return memcmp(&a, &b, sizeof(T)) == 0;
+            return memcmp(&a, &b, sizeof(T)) != 0;
         });
     }
 
-    template<typename T> SimpitBuilder RegisterOutgoing(bool(*equality)(T, T))
+    template<typename T> SimpitBuilder RegisterOutgoing(bool(*delta)(T, T))
     {
-        _messageTypes->TryRegisterOutgoing<T>(equality);
+        _messageTypes->TryRegisterOutgoing<T>(delta);
         return *this;
     }
 

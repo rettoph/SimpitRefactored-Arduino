@@ -22,6 +22,8 @@ public:
 
     bool TryGetOutgoingMessageType(byte id, OutgoingSimpitMessageType *&messageType);
 
+    int PublishIncoming(void* sender);
+
     template<typename T> bool TryRegisterIncoming(void(*handler)(void*, T*))
     {
         if(_incomingCount > 0 && _incomingCount % SimpitMessageTypeProvider_BufferIncrement == 0)
@@ -42,7 +44,7 @@ public:
         return true;
     }
 
-    template<typename T> bool TryRegisterOutgoing(bool(*equality)(T, T))
+    template<typename T> bool TryRegisterOutgoing(bool(*delta)(T, T))
     {
         if(_outgoingCount > 0 && _outgoingCount % SimpitMessageTypeProvider_BufferIncrement == 0)
         { // Time to resize the outgoing buffer
@@ -56,7 +58,7 @@ public:
             _outgoing = newOutgoing;
         }
 
-        GenericOutgoingSimpitMessageType<T>* type = new GenericOutgoingSimpitMessageType<T>(GenericOutgoingSimpitMessageType<T>::MessageTypeId, equality);
+        GenericOutgoingSimpitMessageType<T>* type = new GenericOutgoingSimpitMessageType<T>(GenericOutgoingSimpitMessageType<T>::MessageTypeId, delta);
         _outgoing[_outgoingCount++] = (OutgoingSimpitMessageType*)type;
 
         return true;

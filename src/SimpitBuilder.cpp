@@ -16,7 +16,10 @@ SimpitBuilder::SimpitBuilder()
 {
     _messageTypes = new SimpitMessageTypeProvider();
 
-    this->RegisterOutgoing<CustomLog>();
+    this->RegisterOutgoing<CustomLog>([](CustomLog a, CustomLog b) { return true; })
+        .RegisterOutgoing<Request>([](Request a, Request b) { return true; })
+        .RegisterOutgoing<RegisterHandler>([](RegisterHandler a, RegisterHandler b) { return true; })
+        .RegisterOutgoing<DeregisterHandler>([](DeregisterHandler a, DeregisterHandler b) { return true; });
 }
 
 SimpitBuilder SimpitBuilder::RegisterAddon(SimpitAddon *addon)

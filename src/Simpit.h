@@ -14,6 +14,7 @@ private:
     SimpitStream _buffer;
     RegisterHandler *_register;
     DeregisterHandler *_deregister;
+    bool _reading;
 
 public:
   /** Default constructor. Usually called via SimpitBuilder::Build()
@@ -44,6 +45,67 @@ public:
         }
 
         outgoing->Publish(_serial, &data);
+    }
+
+    template<typename T> T* GetLatestOutgoing()
+    {
+        OutgoingSimpitMessageType* outgoing;
+        if(_messageTypes->TryGetOutgoingMessageType(GenericOutgoingSimpitMessageType<T>::MessageTypeId, *&outgoing) == false)
+        {
+            return; // TODO: Some sort of error handling here
+        }
+
+        return (T*)outgoing->GetLatest();
+    }
+
+    template<typename T> T* GetLatestIncoming()
+    {
+        IncomingSimpitMessageType* incoming;
+        if(_messageTypes->TryGetIncomingMessageType(GenericIncomingSimpitMessageType<T>::MessageTypeId, *&incoming) == false)
+        {
+            return; // TODO: Some sort of error handling here
+        }
+
+        return (T*)incoming->GetLatest();
+    }
+
+    template<typename T> void SubscribeIncoming(bool request = false)
+    {
+        int index = 0;
+        for(int i=0; i < SIMPIT_CORE_MESSAGE_TYPE_BUFFER_SIZE; i++)
+        {
+            if(_register->MessageTypeIds[i] == 0x0)
+            {
+                _register->MessageTypeIds[i] = GenericIncomingSimpitMessageType<T>::MessageTypeId;
+                break;
+            }
+        }
+
+        if(request == true)
+        {
+            this->RequestIncoming<T>();
+        }
+    }
+
+    template<typename T> void UnsubscribeIncoming()
+    {
+        int index = 0;
+        for(int i=0; i < SIMPIT_CORE_MESSAGE_TYPE_BUFFER_SIZE; i++)
+        {
+            if(_deregister->MessageTypeIds[i] == 0x0)
+            {
+                _deregister->MessageTypeIds[i] = GenericIncomingSimpitMessageType<T>::MessageTypeId;
+                break;
+            }
+        }
+    }
+
+    template<typename T> void RequestIncoming()
+    {
+        Request request = Request();
+        request.MessageTypeId = GenericIncomingSimpitMessageType<T>::MessageTypeId;
+
+        this->WriteOutgoing(request);
     }
 
     void Log(String value);

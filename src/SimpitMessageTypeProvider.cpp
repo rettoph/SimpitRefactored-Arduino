@@ -15,6 +15,21 @@ SimpitMessageTypeProvider::~SimpitMessageTypeProvider()
     free(_outgoing);
 }
 
+int SimpitMessageTypeProvider::PublishIncoming(void* sender)
+{
+    int count = 0;
+
+    for(int i = 0; i < _incomingCount; i++)
+    {
+        if(_incoming[i]->TryPublish(sender) == true)
+        {
+            count++;
+        }
+    }
+
+    return count;
+}
+
 bool SimpitMessageTypeProvider::TryGetOutgoingMessageType(byte id, OutgoingSimpitMessageType *&messageType)
 {
     for(int i = 0; i < _outgoingCount; i++)

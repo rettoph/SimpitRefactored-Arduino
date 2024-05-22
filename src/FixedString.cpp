@@ -17,19 +17,14 @@ FixedString::FixedString(String value)
 
 String FixedString::Get()
 {
-    int length = SIMPIT_FIXED_STRING_BUFFER_SIZE;
+    String value = F("");
     for(unsigned int i=0; i<SIMPIT_FIXED_STRING_BUFFER_SIZE; i++)
     {
         if(_buffer[i] == FixedString::NullChar)
         {
-            length = i;
             break;
         }
-    }
 
-    String value = F("");
-    for(unsigned int i = 0; i < length; i++)
-    {
         value += _buffer[i];
     }
 
