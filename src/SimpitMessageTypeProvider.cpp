@@ -2,11 +2,11 @@
 
 SimpitMessageTypeProvider::SimpitMessageTypeProvider()
 {
-    _incomingAlloc = 0;
+    _alloc = 0;
+    
     _incomingCount = 0;
     _incoming = (IncomingSimpitMessageType**)malloc(sizeof(IncomingSimpitMessageType**) * SimpitMessageTypeProvider_BufferIncrement);
 
-    _outgoingAlloc = 0;
     _outgoingCount = 0;
     _outgoing = (OutgoingSimpitMessageType**)malloc(sizeof(OutgoingSimpitMessageType**) * SimpitMessageTypeProvider_BufferIncrement);
 }
