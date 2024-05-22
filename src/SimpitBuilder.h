@@ -23,6 +23,7 @@ public:
         return *this;
     }
 
+    /*
     template<typename T> SimpitBuilder RegisterOutgoing()
     {
         return this->RegisterOutgoing<T>([](T a, T b) {
@@ -33,6 +34,13 @@ public:
     template<typename T> SimpitBuilder RegisterOutgoing(bool(*delta)(T, T))
     {
         _messageTypes->TryRegisterOutgoing<T>(delta);
+        return *this;
+    }
+    */
+
+    template<typename T> SimpitBuilder RegisterOutgoing()
+    {
+        _messageTypes->TryRegisterOutgoing<T>();
         return *this;
     }
 

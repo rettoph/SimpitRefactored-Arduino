@@ -12,8 +12,8 @@ private:
     SimpitMessageTypeProvider *_messageTypes;
     SerialPort* _serial;
     SimpitStream _buffer;
-    RegisterHandler *_register;
-    DeregisterHandler *_deregister;
+    RegisterHandler _register;
+    DeregisterHandler _deregister;
     bool _reading;
 
 public:
@@ -47,36 +47,14 @@ public:
         outgoing->Publish(_serial, &data);
     }
 
-    template<typename T> T* GetLatestOutgoing()
-    {
-        OutgoingSimpitMessageType* outgoing;
-        if(_messageTypes->TryGetOutgoingMessageType(GenericOutgoingSimpitMessageType<T>::MessageTypeId, *&outgoing) == false)
-        {
-            return; // TODO: Some sort of error handling here
-        }
-
-        return (T*)outgoing->GetLatest();
-    }
-
-    template<typename T> T* GetLatestIncoming()
-    {
-        IncomingSimpitMessageType* incoming;
-        if(_messageTypes->TryGetIncomingMessageType(GenericIncomingSimpitMessageType<T>::MessageTypeId, *&incoming) == false)
-        {
-            return; // TODO: Some sort of error handling here
-        }
-
-        return (T*)incoming->GetLatest();
-    }
-
     template<typename T> bool SubscribeIncoming()
     {
         int index = 0;
         for(int i=0; i < SIMPIT_CORE_MESSAGE_TYPE_BUFFER_SIZE; i++)
         {
-            if(_register->MessageTypeIds[i] == 0x0)
+            if(_register.MessageTypeIds[i] == 0x0)
             {
-                _register->MessageTypeIds[i] = GenericIncomingSimpitMessageType<T>::MessageTypeId;
+                _register.MessageTypeIds[i] = GenericIncomingSimpitMessageType<T>::MessageTypeId;
                 this->RequestIncoming<T>();
                 return true;
             }
@@ -90,9 +68,9 @@ public:
         int index = 0;
         for(int i=0; i < SIMPIT_CORE_MESSAGE_TYPE_BUFFER_SIZE; i++)
         {
-            if(_deregister->MessageTypeIds[i] == 0x0)
+            if(_deregister.MessageTypeIds[i] == 0x0)
             {
-                _deregister->MessageTypeIds[i] = GenericIncomingSimpitMessageType<T>::MessageTypeId;
+                _deregister.MessageTypeIds[i] = GenericIncomingSimpitMessageType<T>::MessageTypeId;
                 return true;
             }
         }

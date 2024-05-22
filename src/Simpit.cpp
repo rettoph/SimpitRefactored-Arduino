@@ -10,8 +10,8 @@ Simpit::Simpit(SimpitMessageTypeProvider *messageTypes, Stream &serial)
 {
     _messageTypes = messageTypes;
     _serial = new SerialPort(serial);
-    _register = this->GetLatestOutgoing<RegisterHandler>();
-    _deregister = this->GetLatestOutgoing<DeregisterHandler>();
+    _register = RegisterHandler();
+    _deregister = DeregisterHandler();
 }
 
 bool Simpit::Init(byte response)
@@ -84,16 +84,16 @@ void Simpit::Update()
         // TODO: Some sort of error handling
     }
 
-    if(_register->MessageTypeIds[0] != 0x0)
+    if(_register.MessageTypeIds[0] != 0x0)
     {
-        this->WriteOutgoing(*_register);
-        memset(_register, 0x0, sizeof(RegisterHandler));
+        this->WriteOutgoing(_register);
+        memset(&_register, 0x0, sizeof(RegisterHandler));
     }
 
-    if(_deregister->MessageTypeIds[0] != 0x0)
+    if(_deregister.MessageTypeIds[0] != 0x0)
     {
-        this->WriteOutgoing(*_deregister);
-        memset(_deregister, 0x0, sizeof(DeregisterHandler));
+        this->WriteOutgoing(_deregister);
+        memset(&_deregister, 0x0, sizeof(DeregisterHandler));
     }
 }
 

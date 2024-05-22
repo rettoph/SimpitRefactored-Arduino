@@ -47,6 +47,28 @@ public:
         return true;
     }
 
+    template<typename T> bool TryRegisterOutgoing()
+    {
+        if(_outgoingCount > 0 && _outgoingCount % SimpitMessageTypeProvider_BufferIncrement == 0)
+        { // Time to resize the outgoing buffer
+            OutgoingSimpitMessageType** newOutgoing = (OutgoingSimpitMessageType**)malloc(sizeof(OutgoingSimpitMessageType**) * (_outgoingCount + SimpitMessageTypeProvider_BufferIncrement));
+            for(int i=0; i<_outgoingCount; i++)
+            {
+                newOutgoing[i] = _outgoing[i];
+            }
+
+            free(_outgoing);
+            _outgoing = newOutgoing;
+        }
+
+        GenericOutgoingSimpitMessageType<T>* type = new GenericOutgoingSimpitMessageType<T>(GenericOutgoingSimpitMessageType<T>::MessageTypeId);
+        _outgoing[_outgoingCount++] = (OutgoingSimpitMessageType*)type;
+        _alloc += sizeof(GenericOutgoingSimpitMessageType<T>);
+
+        return true;
+    }
+
+/*
     template<typename T> bool TryRegisterOutgoing(bool(*delta)(T, T))
     {
         if(_outgoingCount > 0 && _outgoingCount % SimpitMessageTypeProvider_BufferIncrement == 0)
@@ -67,6 +89,7 @@ public:
 
         return true;
     }
+*/
 
     byte GetIncomingCount() { return _incomingCount; }
     byte GetOutgoingCount() { return _outgoingCount; }
