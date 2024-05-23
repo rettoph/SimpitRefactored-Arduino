@@ -20,8 +20,6 @@ public:
 
     bool TryGetOutgoingMessageType(byte id, OutgoingSimpitMessageType *&messageType);
 
-    int PublishIncoming(void* sender, SimpitStream simpit);
-
     template<typename T> bool TryRegisterIncoming(void(*handler)(void*, T*))
     {
         GenericIncomingSimpitMessageType<T>* type = new GenericIncomingSimpitMessageType<T>(GenericIncomingSimpitMessageType<T>::MessageTypeId, handler);
