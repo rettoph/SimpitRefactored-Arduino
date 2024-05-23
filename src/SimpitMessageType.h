@@ -14,18 +14,12 @@ struct IncomingSimpitMessageType
         this->Id = id;
     }
 
-    virtual bool TryPublish(void* sender) = 0;
-
-    virtual void SetLatest(SimpitStream incoming) = 0;
-
-    virtual void* GetLatest() = 0;
+    virtual bool TryPublish(void* sender, SimpitStream incoming) = 0;
 };
 
 template<typename T> struct GenericIncomingSimpitMessageType : public IncomingSimpitMessageType
 {
 private:
-    bool _dirty;
-    T _latest;
     void(*_handler)(void*, T*);
 
 public:
@@ -34,32 +28,20 @@ public:
     GenericIncomingSimpitMessageType(byte id, void(*handler)(void*, T*)) : IncomingSimpitMessageType(id)
     {
         _handler = handler;
-        _dirty = false;
 
         this->Id = id;
     }
 
-    bool TryPublish(void* sender) override
+    bool TryPublish(void* sender, SimpitStream incoming) override
     {
-        if(_dirty == false)
+        T value;
+        if(incoming.TryReadBytes(sizeof(T), &value) == false)
         {
             return false;
         }
 
-        _handler(sender, &_latest);
-        _dirty = false;
+        _handler(sender, &value);
         return true;
-    }
-
-    void SetLatest(SimpitStream incoming) override
-    {
-        incoming.TryReadBytes(sizeof(T), &_latest);
-        _dirty = true;
-    }
-
-    void* GetLatest() override
-    {
-        return &_latest;
     }
 };
 

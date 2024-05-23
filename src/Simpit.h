@@ -34,8 +34,6 @@ public:
 
     int ReadIncoming();
 
-    int PublishIncoming();
-
     void Update();
 
     template<typename T> void WriteOutgoing(T data)

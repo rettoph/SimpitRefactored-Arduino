@@ -20,7 +20,7 @@ public:
 
     bool TryGetOutgoingMessageType(byte id, OutgoingSimpitMessageType *&messageType);
 
-    int PublishIncoming(void* sender);
+    int PublishIncoming(void* sender, SimpitStream simpit);
 
     template<typename T> bool TryRegisterIncoming(void(*handler)(void*, T*))
     {

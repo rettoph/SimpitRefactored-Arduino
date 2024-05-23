@@ -77,12 +77,6 @@ bool Simpit::Init(byte response)
 void Simpit::Update()
 {
     int incoming = this->ReadIncoming();
-    int published = this->PublishIncoming();
-
-    if(incoming != published)
-    {
-        // TODO: Some sort of error handling
-    }
 
     if(_register.MessageTypeIds[0] != 0x0)
     {
@@ -119,7 +113,7 @@ int Simpit::ReadIncoming()
             continue;
         }
 
-        incoming->SetLatest(_buffer);
+        incoming->TryPublish(this, _buffer);
         _buffer.Clear();
         count++;
     }
@@ -127,11 +121,6 @@ int Simpit::ReadIncoming()
     _reading = false;
 
     return count;
-}
-
-int Simpit::PublishIncoming()
-{
-    _messageTypes->PublishIncoming(this);
 }
 
 void Simpit::Log(String value)
