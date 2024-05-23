@@ -35,7 +35,7 @@ public:
     bool TryPublish(void* sender, SimpitStream incoming) override
     {
         T value;
-        if(incoming.TryReadBytes(sizeof(T), &value) == false)
+        if(incoming.TryPeekBytes(sizeof(T), &value) == false)
         {
             return false;
         }

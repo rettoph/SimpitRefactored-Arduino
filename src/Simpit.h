@@ -14,7 +14,6 @@ private:
     RegisterHandler _register;
     DeregisterHandler _deregister;
     SimpitStream _buffer;
-    bool _reading;
 
 public:
   /** Default constructor. Usually called via SimpitBuilder::Build()

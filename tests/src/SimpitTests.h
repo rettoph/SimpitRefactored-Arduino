@@ -37,7 +37,8 @@ testF(SimpitTests, read_incoming_message)
     byte buffer[256];
     Stream* serial = new MemStream(buffer, 256, 0, true);
 
-    Simpit* simpit = SimpitBuilder(1).RegisterIncoming<TestMessage>(TestMessagehandler)
+    Simpit* simpit = SimpitBuilder(2)
+        .RegisterIncoming<TestMessage>(TestMessagehandler).RegisterIncoming<TestMessage>(TestMessagehandler) // Test 2 handlers for 1 message type
         .Build(*serial);
 
     // Add some noise to the test struct
@@ -66,7 +67,7 @@ testF(SimpitTests, read_incoming_message)
 
     // Publish "incoming" data
     int recieved = simpit->ReadIncoming();
-    assertEqual(recieved, 1);
+    assertEqual(recieved, 2);
 
     // The registered custom handler above simply sets both values equal to each other.
     assertEqual(TestMessage::Instance.Value1, TestMessage::Instance.Value2);

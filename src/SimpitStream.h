@@ -17,11 +17,11 @@ public:
 
 private:
     byte _buffer[BufferSize];
-    int _readIndex;
-    int _writeIndex;
+    byte _readIndex;
+    byte _writeIndex;
     SimpitStreamModeEnum _mode;
 
-    bool SetMode(SimpitStreamModeEnum mode, int& index);
+    bool SetMode(SimpitStreamModeEnum mode, byte &index);
 
 public:
     SimpitStream();
@@ -31,11 +31,12 @@ public:
 
     void Write(byte value);
     void Write(void* values, int size);
-    void Write(byte value, int index);
+    void Write(byte value, byte index);
     void Write(String value);
 
     byte Pop();
-    byte Peek(int index);
+    byte Peek(byte index);
+    bool TryPeekBytes(int size, void *output);
 
     bool TryReadByte(byte &output);
     bool TryReadBytes(int size, void *output);

@@ -93,8 +93,6 @@ void Simpit::Update()
 
 int Simpit::ReadIncoming()
 {
-    _reading = true;
-
     int count = 0;
     while(_serial->TryReadIncoming(&_buffer))
     {
@@ -105,20 +103,21 @@ int Simpit::ReadIncoming()
             continue;
         }
 
+        byte index = 0;
         IncomingSimpitMessageType* incoming;
-        if(_messageTypes->TryGetIncomingMessageType(id, *&incoming) == false)
+        while(_messageTypes->TryGetIncomingMessageType(id, *&incoming, index) == true)
         { // Unknown message type id
-            this->Log("Unknown message: " + String(id) + " of size: " + String(_buffer.Length()));
-            _buffer.Clear();
-            continue;
+            if(incoming->TryPublish(this, _buffer) == false)
+            {
+                break;
+            }
+
+            count++;
         }
 
-        incoming->TryPublish(this, _buffer);
         _buffer.Clear();
-        count++;
+        
     }
-
-    _reading = false;
 
     return count;
 }

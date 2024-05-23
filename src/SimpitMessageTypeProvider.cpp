@@ -11,11 +11,11 @@ SimpitMessageTypeProvider::~SimpitMessageTypeProvider()
     free(_incoming);
 }
 
-bool SimpitMessageTypeProvider::TryGetIncomingMessageType(byte id, IncomingSimpitMessageType *&messageType)
+bool SimpitMessageTypeProvider::TryGetIncomingMessageType(byte id, IncomingSimpitMessageType *&messageType, byte &index)
 {
-    for(int i = 0; i < _incomingCount; i++)
+    while(index < _incomingCount)
     {
-        messageType = *&_incoming[i];
+        messageType = *&_incoming[index++];
 
         if(messageType->Id != id)
         {

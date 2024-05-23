@@ -13,7 +13,7 @@ public:
     SimpitMessageTypeProvider(byte incomingCapacity);
     ~SimpitMessageTypeProvider();
 
-    bool TryGetIncomingMessageType(byte id, IncomingSimpitMessageType *&messageType);
+    bool TryGetIncomingMessageType(byte id, IncomingSimpitMessageType *&messageType, byte &index);
 
     template<typename T> bool TryRegisterIncoming(void(*handler)(void*, T*))
     {

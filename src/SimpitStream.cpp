@@ -7,7 +7,7 @@ SimpitStream::SimpitStream()
     _mode = SimpitStreamModeEnum::None;
 }
 
-bool SimpitStream::SetMode(SimpitStreamModeEnum mode, int& index)
+bool SimpitStream::SetMode(SimpitStreamModeEnum mode, byte &index)
 {
     if(_mode == mode)
     {
@@ -56,7 +56,7 @@ void SimpitStream::Write(void* values, int size)
     }
 }
 
-void SimpitStream::Write(byte value, int index)
+void SimpitStream::Write(byte value, byte index)
 {
     if(this->SetMode(SimpitStreamModeEnum::Write, _writeIndex))
     {
@@ -89,9 +89,27 @@ byte SimpitStream::Pop()
     return _buffer[--_writeIndex];
 }
 
-byte SimpitStream::Peek(int index)
+byte SimpitStream::Peek(byte index)
 {
     return _buffer[index];
+}
+
+bool SimpitStream::TryPeekBytes(int length, void *output)
+{
+    if(this->Length() < length)
+    {
+        return false;
+    }
+
+    byte* ptr = (byte*)output;
+    byte index = _readIndex;
+
+    for(int i=0; i<length; i++)
+    {
+        ptr[i] = _buffer[index++];
+    }
+
+    return true;
 }
 
 bool SimpitStream::TryReadByte(byte &output)
