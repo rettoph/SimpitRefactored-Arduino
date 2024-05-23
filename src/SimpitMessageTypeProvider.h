@@ -7,7 +7,7 @@ class SimpitMessageTypeProvider
 {
 private:
     byte _incomingCount;
-    IncomingSimpitMessageType *_incoming;
+    IncomingSimpitMessageType **_incoming;
 
 public:
     SimpitMessageTypeProvider(byte incomingCapacity);
@@ -17,7 +17,8 @@ public:
 
     template<typename T> bool TryRegisterIncoming(void(*handler)(void*, T*))
     {
-        _incoming[_incomingCount++] = GenericIncomingSimpitMessageType<T>(GenericIncomingSimpitMessageType<T>::MessageTypeId, handler);
+        GenericIncomingSimpitMessageType<T>* type = new GenericIncomingSimpitMessageType<T>(GenericIncomingSimpitMessageType<T>::MessageTypeId, handler);
+        _incoming[_incomingCount++] = (IncomingSimpitMessageType*)type;
 
         return true;
     }
