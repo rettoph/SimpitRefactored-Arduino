@@ -18,7 +18,7 @@ SerialPort::SerialPort(Stream &serial)
     _buffer = SimpitStream();
 }
 
-bool SerialPort::TryReadIncoming(SimpitStream &incoming)
+bool SerialPort::TryReadIncoming(SimpitStream *&incoming)
 {
     _buffer.Clear();
 
@@ -41,8 +41,7 @@ bool SerialPort::TryReadIncoming(SimpitStream &incoming)
             return false;
         }
 
-        incoming.Clear();
-        _buffer.CopyTo(incoming);
+        incoming = &_buffer;
 
         return true;
     }

@@ -12,6 +12,10 @@ Simpit::Simpit(SimpitMessageTypeProvider *messageTypes, Stream &serial)
     _serial = new SerialPort(serial);
     _register = RegisterHandler();
     _deregister = DeregisterHandler();
+
+    // Ensure empty on startup
+    memset(&_register, 0x0, sizeof(RegisterHandler));
+    memset(&_deregister, 0x0, sizeof(RegisterHandler));
 }
 
 bool Simpit::Init(byte response)
@@ -27,7 +31,8 @@ bool Simpit::Init(byte response)
 
     // Wait for reply - if non in 1 sec, return false
     byte count = 0;
-    while(_serial->TryReadIncoming(_buffer) == false)
+    SimpitStream *buffer;
+    while(_serial->TryReadIncoming(buffer) == false)
     {
         count += 1;
         delay(100);
@@ -39,7 +44,7 @@ bool Simpit::Init(byte response)
     }
 
     byte id;
-    if(_buffer.TryReadByte(id) == false)
+    if(buffer->TryReadByte(id) == false)
     { // No data recieved?
         return false;
     }
@@ -50,7 +55,7 @@ bool Simpit::Init(byte response)
     }
 
     Handshake handshake = Handshake();
-    _buffer.TryReadBytes(sizeof(Handshake), &handshake);
+    buffer->TryReadBytes(sizeof(Handshake), &handshake);
 
     if(handshake.HandshakeType != 0x01)
     { // Not a SYNACK response
@@ -102,10 +107,11 @@ int Simpit::ReadIncoming()
     _reading = true;
 
     int count = 0;
-    while(_serial->TryReadIncoming(_buffer))
+    SimpitStream *buffer;
+    while(_serial->TryReadIncoming(buffer))
     {
         byte id;
-        if(_buffer.TryReadByte(id) == false)
+        if(buffer->TryReadByte(id) == false)
         { // Invalid message
             continue;
         }
@@ -113,15 +119,14 @@ int Simpit::ReadIncoming()
         IncomingSimpitMessageType* incoming;
         if(_messageTypes->TryGetIncomingMessageType(id, *&incoming) == false)
         { // Unknown message type id
-            this->Log("Simpit-Arduino: Unknown message: " + id);
+            this->Log("Unknown message: " + String(id));
             continue;
         }
 
-        incoming->SetLatest(_buffer);
+        incoming->SetLatest(*buffer);
         count++;
     }
 
-    _buffer.Clear();
     _reading = false;
 
     return count;

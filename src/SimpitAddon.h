@@ -6,7 +6,7 @@ class SimpitBuilder;
 class SimpitAddon
 {
 public:
-    virtual void Register(SimpitBuilder builder) = 0;
+    virtual void Register(SimpitBuilder *builder) = 0;
 };
 
 #endif

@@ -11,7 +11,6 @@ class Simpit
 private:
     SimpitMessageTypeProvider *_messageTypes;
     SerialPort* _serial;
-    SimpitStream _buffer;
     RegisterHandler _register;
     DeregisterHandler _deregister;
     bool _reading;
@@ -49,7 +48,6 @@ public:
 
     template<typename T> bool SubscribeIncoming()
     {
-        int index = 0;
         for(int i=0; i < SIMPIT_CORE_MESSAGE_TYPE_BUFFER_SIZE; i++)
         {
             if(_register.MessageTypeIds[i] == 0x0)
@@ -65,7 +63,6 @@ public:
 
     template<typename T> bool UnsubscribeIncoming()
     {
-        int index = 0;
         for(int i=0; i < SIMPIT_CORE_MESSAGE_TYPE_BUFFER_SIZE; i++)
         {
             if(_deregister.MessageTypeIds[i] == 0x0)

@@ -46,6 +46,11 @@ public:
 
     SimpitBuilder RegisterAddon(SimpitAddon *addon);
 
+    template<typename T> SimpitBuilder RegisterAddon()
+    {
+        return this->RegisterAddon(new T());
+    }
+
     Simpit* Build(Stream &serial);
 };
 

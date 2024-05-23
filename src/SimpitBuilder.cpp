@@ -24,7 +24,7 @@ SimpitBuilder::SimpitBuilder()
 
 SimpitBuilder SimpitBuilder::RegisterAddon(SimpitAddon *addon)
 {
-    addon->Register(*this);
+    addon->Register(this);
     delete addon;
 
     return *this;
