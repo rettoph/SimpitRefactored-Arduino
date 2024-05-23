@@ -45,65 +45,15 @@ public:
     }
 };
 
-struct OutgoingSimpitMessageType
-{
-    byte Id;
-
-    OutgoingSimpitMessageType(byte id)
-    {
-        this->Id = id;
-    }
-
-    virtual void Publish(SerialPort* serial, void* data) = 0;
-};
-
-template<typename T> struct GenericOutgoingSimpitMessageType : public OutgoingSimpitMessageType
+template<typename T> struct GenericOutgoingSimpitMessageType
 {
 public:
     static const byte MessageTypeId;
 
-    GenericOutgoingSimpitMessageType(byte id) : OutgoingSimpitMessageType(id)
+    static void Publish(SerialPort* serial, void* data)
     {
-    }
-
-    void Publish(SerialPort* serial, void* data) override
-    {
-        serial->TryWriteOutgoing(this->Id, (void*)data, sizeof(T));
+        serial->TryWriteOutgoing(GenericOutgoingSimpitMessageType<T>::MessageTypeId, (void*)data, sizeof(T));
     }
 };
-
-// template<typename T> struct GenericOutgoingSimpitMessageType : public OutgoingSimpitMessageType
-// {
-// private:
-//     T _latest;
-//     bool(*_delta)(T, T);
-// 
-// public:
-//     static const byte MessageTypeId;
-// 
-//     GenericOutgoingSimpitMessageType(byte id, bool(*delta)(T, T)) : OutgoingSimpitMessageType(id)
-//     {
-//         _latest = T();
-//         _delta = delta;
-//     }
-// 
-//     void Publish(SerialPort* serial, void* data) override
-//     {
-//         T* casted = (T*)data;
-//         if(_delta(_latest, *casted) == false)
-//         { // No change detected
-//             return;
-//         }
-// 
-//         serial->TryWriteOutgoing(this->Id, (void*)data, sizeof(T));
-// 
-//         memccpy(casted, &_latest, 0, sizeof(T));
-//     }
-// 
-//     void* GetLatest() override
-//     {
-//         return &_latest;
-//     }
-// };
 
 #endif

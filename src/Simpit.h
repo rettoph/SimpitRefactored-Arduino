@@ -38,13 +38,7 @@ public:
 
     template<typename T> void WriteOutgoing(T data)
     {
-        OutgoingSimpitMessageType* outgoing;
-        if(_messageTypes->TryGetOutgoingMessageType(GenericOutgoingSimpitMessageType<T>::MessageTypeId, *&outgoing) == false)
-        {
-            return; // TODO: Some sort of error handling here
-        }
-
-        outgoing->Publish(_serial, &data);
+        GenericOutgoingSimpitMessageType<T>::Publish(_serial, &data);
     }
 
     template<typename T> bool SubscribeIncoming()

@@ -11,14 +11,9 @@ SIMPIT_DECLARE_OUTGOING_TYPE(Request, SIMPIT_CORE_OUTGOING_REQUEST_MESSAGE_ID);
 
 SIMPIT_DECLARE_INCOMING_TYPE(EchoRequest, SIMPIT_CORE_INCOMING_ECHO_REQUEST_ID);
 
-SimpitBuilder::SimpitBuilder(byte incomingCapacity, byte outgoingCapacity)
+SimpitBuilder::SimpitBuilder(byte incomingCapacity)
 {
-    _messageTypes = new SimpitMessageTypeProvider(incomingCapacity, outgoingCapacity + 4);
-
-    this->RegisterOutgoing<CustomLog>()
-        .RegisterOutgoing<Request>()
-        .RegisterOutgoing<RegisterHandler>()
-        .RegisterOutgoing<DeregisterHandler>();
+    _messageTypes = new SimpitMessageTypeProvider(incomingCapacity);
 }
 
 Simpit* SimpitBuilder::Build(Stream &serial)

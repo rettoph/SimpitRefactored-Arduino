@@ -1,35 +1,14 @@
 #include "SimpitMessageTypeProvider.h"
 
-SimpitMessageTypeProvider::SimpitMessageTypeProvider(byte incomingCapacity, byte outgoingCapacity)
+SimpitMessageTypeProvider::SimpitMessageTypeProvider(byte incomingCapacity)
 {
     _incomingCount = 0;
     _incoming = (IncomingSimpitMessageType**)malloc(sizeof(IncomingSimpitMessageType**) * incomingCapacity);
-
-    _outgoingCount = 0;
-    _outgoing = (OutgoingSimpitMessageType**)malloc(sizeof(OutgoingSimpitMessageType**) * outgoingCapacity);
 }
 
 SimpitMessageTypeProvider::~SimpitMessageTypeProvider()
 {
     free(_incoming);
-    free(_outgoing);
-}
-
-bool SimpitMessageTypeProvider::TryGetOutgoingMessageType(byte id, OutgoingSimpitMessageType *&messageType)
-{
-    for(int i = 0; i < _outgoingCount; i++)
-    {
-        messageType = *&_outgoing[i];
-
-        if(messageType->Id != id)
-        {
-            continue;
-        }
-
-        return true;
-    }
-
-    return false;
 }
 
 bool SimpitMessageTypeProvider::TryGetIncomingMessageType(byte id, IncomingSimpitMessageType *&messageType)

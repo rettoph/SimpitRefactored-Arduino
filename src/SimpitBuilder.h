@@ -15,23 +15,14 @@ private:
     SimpitMessageTypeProvider* _messageTypes;
 
 public:
-    SimpitBuilder(byte incomingCapacity, byte outgoingCapacity);
-
-    SimpitBuilder ReserveIncoming(byte count);
-    SimpitBuilder ReserveOutgoing(byte count);
+    SimpitBuilder(byte incomingCapacity);
 
     template<typename T> SimpitBuilder RegisterIncoming(void(*handler)(void*, T*))
     {
         _messageTypes->TryRegisterIncoming<T>(handler);
         return *this;
     }
-
-    template<typename T> SimpitBuilder RegisterOutgoing()
-    {
-        _messageTypes->TryRegisterOutgoing<T>();
-        return *this;
-    }
-
+    
     template<typename T> SimpitBuilder Register()
     {
         T::Register(this);
