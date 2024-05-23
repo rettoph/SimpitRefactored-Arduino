@@ -14,7 +14,7 @@ private:
 public:
     SerialPort(Stream &serial);
 
-    bool TryReadIncoming(SimpitStream *&incoming);
+    bool TryReadIncoming(SimpitStream *incoming);
 
     bool TryWriteOutgoing(byte messageTypeId, void* data, unsigned int size);
 

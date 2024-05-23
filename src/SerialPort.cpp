@@ -18,30 +18,26 @@ SerialPort::SerialPort(Stream &serial)
     _buffer = SimpitStream();
 }
 
-bool SerialPort::TryReadIncoming(SimpitStream *&incoming)
+bool SerialPort::TryReadIncoming(SimpitStream *incoming)
 {
-    _buffer.Clear();
-
     while(_serial->available())
     {
         byte data = _serial->read();
-        _buffer.Write(data);
+        incoming->Write(data);
         if(data != 0x0) // 0x0 indicates end of message
         {
             continue;
         }
 
-        if(COBS::TryDecode(_buffer) == false)
+        if(COBS::TryDecode(*incoming) == false)
         {
             return false;
         }
 
-        if(CheckSum::ValidateCheckSum(_buffer) == false)
+        if(CheckSum::ValidateCheckSum(*incoming) == false)
         {
             return false;
         }
-
-        incoming = &_buffer;
 
         return true;
     }

@@ -13,6 +13,7 @@ private:
     SerialPort* _serial;
     RegisterHandler _register;
     DeregisterHandler _deregister;
+    SimpitStream _buffer;
     bool _reading;
 
 public:

@@ -13,7 +13,7 @@ class SimpitStream
 {
 
 public:
-    static constexpr unsigned int BufferSize = 128;
+    static constexpr unsigned int BufferSize = 64;
 
 private:
     byte _buffer[BufferSize];

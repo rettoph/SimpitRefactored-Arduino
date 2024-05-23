@@ -12,6 +12,7 @@ Simpit::Simpit(SimpitMessageTypeProvider *messageTypes, Stream &serial)
     _serial = new SerialPort(serial);
     _register = RegisterHandler();
     _deregister = DeregisterHandler();
+    _buffer = SimpitStream();
 
     // Ensure empty on startup
     memset(&_register, 0x0, sizeof(RegisterHandler));
@@ -31,8 +32,7 @@ bool Simpit::Init(byte response)
 
     // Wait for reply - if non in 1 sec, return false
     byte count = 0;
-    SimpitStream *buffer;
-    while(_serial->TryReadIncoming(buffer) == false)
+    while(_serial->TryReadIncoming(&_buffer) == false)
     {
         count += 1;
         delay(100);
@@ -44,7 +44,7 @@ bool Simpit::Init(byte response)
     }
 
     byte id;
-    if(buffer->TryReadByte(id) == false)
+    if(_buffer.TryReadByte(id) == false)
     { // No data recieved?
         return false;
     }
@@ -55,7 +55,8 @@ bool Simpit::Init(byte response)
     }
 
     Handshake handshake = Handshake();
-    buffer->TryReadBytes(sizeof(Handshake), &handshake);
+    _buffer.TryReadBytes(sizeof(Handshake), &handshake);
+    _buffer.Clear();
 
     if(handshake.HandshakeType != 0x01)
     { // Not a SYNACK response
@@ -69,12 +70,6 @@ bool Simpit::Init(byte response)
 
     synchronisation.Type = SynchronisationMessageTypeEnum::ACK;
     _serial->TryWriteOutgoing(SIMPIT_CORE_OUTGOING_SYNCHRONISATION_ID, &synchronisation, sizeof(Synchronisation));
-
-    int totalAlloc = sizeof(this) + _messageTypes->GetSizeInBytes();
-    this->Log("Runtime Alloc: " + String(totalAlloc), CustomLogFlags::Verbose);
-
-    this->Log("Registered Incoming: " + String(_messageTypes->GetIncomingCount()), CustomLogFlags::Verbose);
-    this->Log("Registered Outgoing: " + String(_messageTypes->GetOutgoingCount()), CustomLogFlags::Verbose);
 
     return true;
 }
@@ -107,23 +102,25 @@ int Simpit::ReadIncoming()
     _reading = true;
 
     int count = 0;
-    SimpitStream *buffer;
-    while(_serial->TryReadIncoming(buffer))
+    while(_serial->TryReadIncoming(&_buffer))
     {
         byte id;
-        if(buffer->TryReadByte(id) == false)
+        if(_buffer.TryReadByte(id) == false)
         { // Invalid message
+            _buffer.Clear();
             continue;
         }
 
         IncomingSimpitMessageType* incoming;
         if(_messageTypes->TryGetIncomingMessageType(id, *&incoming) == false)
         { // Unknown message type id
-            this->Log("Unknown message: " + String(id));
+            this->Log("Unknown message: " + String(id) + " of size: " + String(_buffer.Length()));
+            _buffer.Clear();
             continue;
         }
 
-        incoming->SetLatest(*buffer);
+        incoming->SetLatest(_buffer);
+        _buffer.Clear();
         count++;
     }
 
