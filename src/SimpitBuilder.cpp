@@ -1,6 +1,5 @@
 #include "SimpitBuilder.h"
 #include "CoreSimpitMessageTypeIds.h"
-#include "SimpitAddon.h"
 
 SIMPIT_DECLARE_OUTGOING_TYPE(EchoRequest, SIMPIT_CORE_OUTGOING_ECHO_REQUEST_ID);
 SIMPIT_DECLARE_OUTGOING_TYPE(EchoResponse, SIMPIT_CORE_OUTGOING_ECHO_RESPONSE_ID);
@@ -12,22 +11,14 @@ SIMPIT_DECLARE_OUTGOING_TYPE(Request, SIMPIT_CORE_OUTGOING_REQUEST_MESSAGE_ID);
 
 SIMPIT_DECLARE_INCOMING_TYPE(EchoRequest, SIMPIT_CORE_INCOMING_ECHO_REQUEST_ID);
 
-SimpitBuilder::SimpitBuilder()
+SimpitBuilder::SimpitBuilder(byte incomingCapacity, byte outgoingCapacity)
 {
-    _messageTypes = new SimpitMessageTypeProvider();
+    _messageTypes = new SimpitMessageTypeProvider(incomingCapacity, outgoingCapacity + 4);
 
     this->RegisterOutgoing<CustomLog>()
         .RegisterOutgoing<Request>()
         .RegisterOutgoing<RegisterHandler>()
         .RegisterOutgoing<DeregisterHandler>();
-}
-
-SimpitBuilder SimpitBuilder::RegisterAddon(SimpitAddon *addon)
-{
-    addon->Register(this);
-    delete addon;
-
-    return *this;
 }
 
 Simpit* SimpitBuilder::Build(Stream &serial)

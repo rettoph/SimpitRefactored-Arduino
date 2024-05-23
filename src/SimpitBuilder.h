@@ -15,7 +15,10 @@ private:
     SimpitMessageTypeProvider* _messageTypes;
 
 public:
-    SimpitBuilder();
+    SimpitBuilder(byte incomingCapacity, byte outgoingCapacity);
+
+    SimpitBuilder ReserveIncoming(byte count);
+    SimpitBuilder ReserveOutgoing(byte count);
 
     template<typename T> SimpitBuilder RegisterIncoming(void(*handler)(void*, T*))
     {
@@ -23,32 +26,15 @@ public:
         return *this;
     }
 
-    /*
-    template<typename T> SimpitBuilder RegisterOutgoing()
-    {
-        return this->RegisterOutgoing<T>([](T a, T b) {
-            return memcmp(&a, &b, sizeof(T)) != 0;
-        });
-    }
-
-    template<typename T> SimpitBuilder RegisterOutgoing(bool(*delta)(T, T))
-    {
-        _messageTypes->TryRegisterOutgoing<T>(delta);
-        return *this;
-    }
-    */
-
     template<typename T> SimpitBuilder RegisterOutgoing()
     {
         _messageTypes->TryRegisterOutgoing<T>();
         return *this;
     }
 
-    SimpitBuilder RegisterAddon(SimpitAddon *addon);
-
-    template<typename T> SimpitBuilder RegisterAddon()
+    template<typename T> SimpitBuilder Register()
     {
-        return this->RegisterAddon(new T());
+        T::Register(this);
     }
 
     Simpit* Build(Stream &serial);
