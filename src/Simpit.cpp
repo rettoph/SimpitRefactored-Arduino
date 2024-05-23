@@ -77,7 +77,7 @@ bool Simpit::Init(byte response)
 void Simpit::Update()
 {
     int incoming = this->ReadIncoming();
-    int published = _messageTypes->PublishIncoming(this);
+    int published = this->PublishIncoming();
 
     if(incoming != published)
     {
@@ -127,6 +127,11 @@ int Simpit::ReadIncoming()
     _reading = false;
 
     return count;
+}
+
+int Simpit::PublishIncoming()
+{
+    _messageTypes->PublishIncoming(this);
 }
 
 void Simpit::Log(String value)

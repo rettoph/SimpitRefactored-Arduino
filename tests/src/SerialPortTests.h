@@ -36,7 +36,7 @@ testF(SerialPortTests, write_read_matches_write)
     SimpitStream *incoming = new SimpitStream();
 
     assertTrue(serial->TryWriteOutgoing(0x69, (void*)data, dataSize));
-    assertTrue(serial->TryReadIncoming(*incoming));
+    assertTrue(serial->TryReadIncoming(incoming));
 
     assertEqual(incoming->Length(), (unsigned int)sizeof(messageTypeId) + dataSize);
 

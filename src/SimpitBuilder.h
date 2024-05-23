@@ -35,6 +35,7 @@ public:
     template<typename T> SimpitBuilder Register()
     {
         T::Register(this);
+        return *this;
     }
 
     Simpit* Build(Stream &serial);
