@@ -3,7 +3,7 @@
 SimpitMessageTypeProvider::SimpitMessageTypeProvider(byte incomingCapacity)
 {
     _incomingCount = 0;
-    _incoming = (IncomingSimpitMessageType**)malloc(sizeof(IncomingSimpitMessageType**) * incomingCapacity);
+    _incoming = (IncomingSimpitMessageType*)malloc(sizeof(GenericIncomingSimpitMessageType<int>) * incomingCapacity);
 }
 
 SimpitMessageTypeProvider::~SimpitMessageTypeProvider()
@@ -15,7 +15,7 @@ bool SimpitMessageTypeProvider::TryGetIncomingMessageType(byte id, IncomingSimpi
 {
     for(int i = 0; i < _incomingCount; i++)
     {
-        messageType = *&_incoming[i];
+        messageType = &_incoming[i];
 
         if(messageType->Id != id)
         {
