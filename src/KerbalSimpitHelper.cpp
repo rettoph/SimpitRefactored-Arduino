@@ -35,11 +35,16 @@ void KerbalSimpitHelper::SetAction(ActionGroupFlags action, bool value)
     }
 }
 
-void KerbalSimpitHelper::EmulateKeypress(short key, Input::Outgoing::KeyboardEmulator::ModifierFlags modifier = Input::Outgoing::KeyboardEmulator::ModifierFlags::NONE)
+void KerbalSimpitHelper::KeyboardInput(short key, Input::Outgoing::KeyboardEmulator::ModifierFlags modifier = Input::Outgoing::KeyboardEmulator::ModifierFlags::NONE)
 {
     Input::Outgoing::KeyboardEmulator keypress = Input::Outgoing::KeyboardEmulator();
     keypress.Key = key;
     keypress.Modifier = modifier;
 
     KerbalSimpitHelper::_simpit->WriteOutgoing(keypress);
+}
+
+void KerbalSimpitHelper::CycleNavballMode()
+{
+    KerbalSimpitHelper::_simpit->WriteOutgoing(NavBall::Outgoing::NavballMode());
 }

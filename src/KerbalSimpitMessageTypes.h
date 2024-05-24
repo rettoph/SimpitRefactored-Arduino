@@ -410,6 +410,7 @@ class Input
     {
       enum struct ModifierFlags : byte
       {
+        NONE = 0,
         SHIFT_MOD = 1,
         CTRL_MOD = 2,
         ALT_MOD = 4,
