@@ -34,3 +34,12 @@ void KerbalSimpitHelper::SetAction(ActionGroupFlags action, bool value)
         KerbalSimpitHelper::_simpit->WriteOutgoing(message);
     }
 }
+
+void KerbalSimpitHelper::EmulateKeypress(short key, Input::Outgoing::KeyboardEmulator::ModifierFlags modifier = Input::Outgoing::KeyboardEmulator::ModifierFlags::NONE)
+{
+    Input::Outgoing::KeyboardEmulator keypress = Input::Outgoing::KeyboardEmulator();
+    keypress.Key = key;
+    keypress.Modifier = modifier;
+
+    KerbalSimpitHelper::_simpit->WriteOutgoing(keypress);
+}

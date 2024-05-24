@@ -13,7 +13,8 @@ public:
     static void Init(Simpit *simpit);
 
     static void SetSASMode(AutoPilotModeEnum mode);
-    static void KerbalSimpitHelper::SetAction(ActionGroupFlags action, bool value);
+    static void SetAction(ActionGroupFlags action, bool value);
+    static void EmulateKeypress(short key, Input::Outgoing::KeyboardEmulator::ModifierFlags modifier = Input::Outgoing::KeyboardEmulator::ModifierFlags::NONE);
 };
 
 #endif
