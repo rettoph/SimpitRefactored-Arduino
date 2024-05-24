@@ -37,14 +37,23 @@ void KerbalSimpitHelper::SetAction(ActionGroupFlags action, bool value)
 
 void KerbalSimpitHelper::KeyboardInput(short key, Input::Outgoing::KeyboardEmulator::ModifierFlags modifier = Input::Outgoing::KeyboardEmulator::ModifierFlags::NONE)
 {
-    Input::Outgoing::KeyboardEmulator keypress = Input::Outgoing::KeyboardEmulator();
-    keypress.Key = key;
-    keypress.Modifier = modifier;
+    Input::Outgoing::KeyboardEmulator message = Input::Outgoing::KeyboardEmulator();
+    message.Key = key;
+    message.Modifier = modifier;
 
-    KerbalSimpitHelper::_simpit->WriteOutgoing(keypress);
+    KerbalSimpitHelper::_simpit->WriteOutgoing(message);
 }
 
 void KerbalSimpitHelper::CycleNavballMode()
 {
     KerbalSimpitHelper::_simpit->WriteOutgoing(NavBall::Outgoing::NavballMode());
+}
+
+void KerbalSimpitHelper::TimewarpTo(Warp::Outgoing::TimewarpTo::InstanceEnum instant, float delay)
+{
+    Warp::Outgoing::TimewarpTo message = Warp::Outgoing::TimewarpTo();
+    message.Instant = instant;
+    message.Delay = delay;
+
+    KerbalSimpitHelper::_simpit->WriteOutgoing(message);
 }

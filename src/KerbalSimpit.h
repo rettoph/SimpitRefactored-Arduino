@@ -55,8 +55,8 @@ SIMPIT_DECLARE_INCOMING_TYPE(Vessel::Incoming::TempLimit, MessageTypeIds::Incomi
 SIMPIT_DECLARE_INCOMING_TYPE(Environment::Incoming::TargetInfo, MessageTypeIds::Incoming::TargetInfo);
 SIMPIT_DECLARE_INCOMING_TYPE(Environment::Incoming::SoIName, MessageTypeIds::Incoming::SoIName);
 SIMPIT_DECLARE_INCOMING_TYPE(Environment::Incoming::SceneChange, MessageTypeIds::Incoming::SceneChange);
-SIMPIT_DECLARE_INCOMING_TYPE(Environment::Incoming::FlightStatus, MessageTypeIds::Incoming::AtmoCondition);
-SIMPIT_DECLARE_INCOMING_TYPE(Environment::Incoming::AtmoCondition, MessageTypeIds::Incoming::ActionGroups);
+SIMPIT_DECLARE_INCOMING_TYPE(Environment::Incoming::FlightStatus, MessageTypeIds::Incoming::FlightStatus);
+SIMPIT_DECLARE_INCOMING_TYPE(Environment::Incoming::AtmoCondition, MessageTypeIds::Incoming::AtmoCondition);
 SIMPIT_DECLARE_INCOMING_TYPE(Environment::Incoming::VesselName, MessageTypeIds::Incoming::VesselName);
 SIMPIT_DECLARE_INCOMING_TYPE(Environment::Incoming::VesselChange, MessageTypeIds::Incoming::VesselChange);
 

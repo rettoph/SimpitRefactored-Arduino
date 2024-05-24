@@ -16,6 +16,7 @@ public:
     static void SetAction(ActionGroupFlags action, bool value);
     static void KeyboardInput(short key, Input::Outgoing::KeyboardEmulator::ModifierFlags modifier = Input::Outgoing::KeyboardEmulator::ModifierFlags::NONE);
     static void CycleNavballMode();
+    static void TimewarpTo(Warp::Outgoing::TimewarpTo::InstanceEnum instant, float delay);
 };
 
 #endif
