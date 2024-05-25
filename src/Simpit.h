@@ -11,8 +11,6 @@ class Simpit
 private:
     SimpitMessageTypeProvider *_messageTypes;
     SerialPort* _serial;
-    RegisterHandler _register;
-    DeregisterHandler _deregister;
     SimpitStream _buffer;
 
 public:
@@ -40,33 +38,23 @@ public:
         GenericOutgoingSimpitMessageType<T>::Publish(_serial, &data);
     }
 
-    template<typename T> bool SubscribeIncoming()
-    {
-        for(int i=0; i < SIMPIT_CORE_MESSAGE_TYPE_BUFFER_SIZE; i++)
-        {
-            if(_register.MessageTypeIds[i] == 0x0)
-            {
-                _register.MessageTypeIds[i] = GenericIncomingSimpitMessageType<T>::MessageTypeId;
-                this->RequestIncoming<T>();
-                return true;
-            }
-        }
 
-        return false;
+    void SubscribeIncoming(RegisterHandler subscriptions);
+
+    void UnsubscribeIncoming(DeregisterHandler unsubscriptions);
+
+    template<typename T> void SubscribeIncoming()
+    {
+        RegisterHandler subscription = RegisterHandler();
+        subscription.Add<T>();
+        this->WriteOutgoing(subscription);
     }
 
-    template<typename T> bool UnsubscribeIncoming()
+    template<typename T> void UnsubscribeIncoming()
     {
-        for(int i=0; i < SIMPIT_CORE_MESSAGE_TYPE_BUFFER_SIZE; i++)
-        {
-            if(_deregister.MessageTypeIds[i] == 0x0)
-            {
-                _deregister.MessageTypeIds[i] = GenericIncomingSimpitMessageType<T>::MessageTypeId;
-                return true;
-            }
-        }
-
-        return false;
+        DeregisterHandler unsubscrption = DeregisterHandler();
+        unsubscrption.Add<T>();
+        this->WriteOutgoing(unsubscrption);
     }
 
     template<typename T> void RequestIncoming()

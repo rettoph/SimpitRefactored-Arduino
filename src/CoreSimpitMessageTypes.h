@@ -42,11 +42,45 @@ struct __attribute__((packed)) CloseSerialPort
 struct __attribute__((packed)) RegisterHandler
 {
     byte MessageTypeIds[SIMPIT_CORE_MESSAGE_TYPE_BUFFER_SIZE];
+
+    template<typename T> RegisterHandler Add()
+    {
+        for(int i=0; i < SIMPIT_CORE_MESSAGE_TYPE_BUFFER_SIZE; i++)
+        {
+            if(this->MessageTypeIds[i] == 0x0)
+            {
+                this->MessageTypeIds[i] = GenericIncomingSimpitMessageType<T>::MessageTypeId;
+                return;
+            }
+        }
+    }
+
+    template<typename T> RegisterHandler Add(byte index)
+    {
+        this->MessageTypeIds[index] = GenericIncomingSimpitMessageType<T>::MessageTypeId;
+    }
 };
 
 struct __attribute__((packed)) DeregisterHandler
 {
     byte MessageTypeIds[SIMPIT_CORE_MESSAGE_TYPE_BUFFER_SIZE];
+
+    template<typename T> RegisterHandler Add()
+    {
+        for(int i=0; i < SIMPIT_CORE_MESSAGE_TYPE_BUFFER_SIZE; i++)
+        {
+            if(this->MessageTypeIds[i] == 0x0)
+            {
+                this->MessageTypeIds[i] = GenericIncomingSimpitMessageType<T>::MessageTypeId;
+                return;
+            }
+        }
+    }
+
+    template<typename T> RegisterHandler Add(byte index)
+    {
+        this->MessageTypeIds[index] = GenericIncomingSimpitMessageType<T>::MessageTypeId;
+    }
 };
 
 enum struct CustomLogFlags : byte
