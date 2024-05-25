@@ -65,8 +65,8 @@ public:
 
     struct __attribute__((packed)) ApsidesTime
     {
-      int Periapsis;
-      int Apoapsis;
+      int32_t Periapsis;
+      int32_t Apoapsis;
     };
 
     struct __attribute__((packed)) Velocity
