@@ -27,38 +27,43 @@ struct __attribute__((packed)) Handshake
 
 struct __attribute__((packed)) EchoRequest
 {
-    static constexpr byte NullChar = '\0';
+    static constexpr char NullChar = '\0';
 
     byte Data[SIMPIT_CORE_MESSAGE_TYPE_BUFFER_SIZE];
 
     void Write(String value)
     {
         value += NullChar;
+        char* chars = (char*)this->Data;
+
         for(int i = 0; i < min(value.length(), SIMPIT_CORE_MESSAGE_TYPE_BUFFER_SIZE); i++)
         {
-            this->Data[i] = value[i];
+            chars[i] = value[i];
         }
     }
 };
 
 struct __attribute__((packed)) EchoResponse
 {
-    static constexpr byte NullChar = '\0';
+    static constexpr char NullChar = '\0';
 
     byte Data[SIMPIT_CORE_MESSAGE_TYPE_BUFFER_SIZE];
 
     String ReadString()
     {
         String value = "";
+        char* chars = (char*)this->Data;
 
         for(int i = 0; i < SIMPIT_CORE_MESSAGE_TYPE_BUFFER_SIZE; i++)
         {
-            if(this->Data[i] == NullChar)
+            if(chars[i] == NullChar)
             {
                 break;
             }
-
-            value += this->Data[i];
+            else 
+            {
+                value += chars[i];
+            }
         }
 
         return value;

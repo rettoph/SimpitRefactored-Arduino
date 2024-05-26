@@ -8,7 +8,7 @@
 struct FixedString
 {
 private:
-    static constexpr byte NullChar = '\0';
+    static constexpr char NullChar = '\0';
 
     char _buffer[SIMPIT_FIXED_STRING_BUFFER_SIZE];
 
