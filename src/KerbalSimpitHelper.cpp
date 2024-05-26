@@ -35,7 +35,7 @@ void KerbalSimpitHelper::SetAction(ActionGroupFlags action, bool value)
     }
 }
 
-void KerbalSimpitHelper::KeyboardInput(short key, Input::Outgoing::KeyboardEmulator::ModifierFlags modifier = Input::Outgoing::KeyboardEmulator::ModifierFlags::NONE)
+void KerbalSimpitHelper::KeyboardInput(short key, Input::Outgoing::KeyboardEmulator::ModifierFlags modifier)
 {
     Input::Outgoing::KeyboardEmulator message = Input::Outgoing::KeyboardEmulator();
     message.Key = key;

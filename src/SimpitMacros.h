@@ -3,7 +3,6 @@
 
 #include "SimpitMessageTypeProvider.h"
 #include "SimpitMessageType.h"
-#include "SimpitBuilder.h"
 #include "Simpit.h"
 #include "function_objects.h"
 

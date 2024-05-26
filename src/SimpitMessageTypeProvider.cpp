@@ -1,9 +1,9 @@
 #include "SimpitMessageTypeProvider.h"
 
-SimpitMessageTypeProvider::SimpitMessageTypeProvider(byte incomingCapacity)
+SimpitMessageTypeProvider::SimpitMessageTypeProvider(byte incomingMessageHandlerCapacity)
 {
     _incomingCount = 0;
-    _incoming = (IncomingSimpitMessageType**)malloc(sizeof(IncomingSimpitMessageType**) * incomingCapacity);
+    _incoming = (IncomingSimpitMessageType**)malloc(sizeof(IncomingSimpitMessageType**) * incomingMessageHandlerCapacity);
 }
 
 SimpitMessageTypeProvider::~SimpitMessageTypeProvider()

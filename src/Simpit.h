@@ -9,8 +9,8 @@
 class Simpit
 {
 private:
-    SimpitMessageTypeProvider *_messageTypes;
-    SerialPort* _serial;
+    SimpitMessageTypeProvider _messageTypes;
+    SerialPort _serial;
     SimpitStream _buffer;
 
 public:
@@ -19,7 +19,7 @@ public:
       @param serial The serial instance this instance will use to communicate
       with the plugin. Usually "Serial".
   */
-    Simpit(SimpitMessageTypeProvider* messageTypes, Stream &serial);
+    Simpit(byte incomingMessageHandlerCapacity, Stream &serial);
 
   /** Initialise the serial connection.
       Performs handshaking with the plugin. Note that the KSPit library
@@ -33,11 +33,22 @@ public:
 
     void Update();
 
-    template<typename T> void WriteOutgoing(T data)
+    template<typename T> Simpit& RegisterIncoming(void(*handler)(void*, T*))
     {
-        GenericOutgoingSimpitMessageType<T>::Publish(_serial, &data);
+        _messageTypes.TryRegisterIncoming<T>(handler);
+        return *this;
+    }
+    
+    template<typename T> Simpit& Register()
+    {
+        T::Register(this);
+        return *this;
     }
 
+    template<typename T> void WriteOutgoing(T data)
+    {
+        GenericOutgoingSimpitMessageType<T>::Publish(&_serial, &data);
+    }
 
     void SubscribeIncoming(RegisterHandler subscriptions);
 

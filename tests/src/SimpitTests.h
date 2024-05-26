@@ -1,12 +1,11 @@
 #include <Arduino.h>
 #include <AUnit.h>
-#include <SimpitBuilder.h>
 #include <SimpitMessageType.h>
 #include <SimpitMacros.h>
 #include <CheckSum.h>
 #include <COBS.h>
 #include <MemStream.h>
-#include <KerbalSimpitAddon.h>
+#include <KerbalSimpit.h>
 
 using namespace aunit;
 
@@ -37,9 +36,10 @@ testF(SimpitTests, read_incoming_message)
     byte buffer[256];
     Stream* serial = new MemStream(buffer, 256, 0, true);
 
-    Simpit* simpit = SimpitBuilder(2)
-        .RegisterIncoming<TestMessage>(TestMessagehandler).RegisterIncoming<TestMessage>(TestMessagehandler) // Test 2 handlers for 1 message type
-        .Build(*serial);
+    Simpit simpit(2, *serial);
+
+    simpit.RegisterIncoming<TestMessage>(TestMessagehandler)
+        .RegisterIncoming<TestMessage>(TestMessagehandler);
 
     // Add some noise to the test struct
     TestMessage::Instance.Value1 = 420;
@@ -66,7 +66,7 @@ testF(SimpitTests, read_incoming_message)
     assertNotEqual(TestMessage::Instance.Value1, TestMessage::Instance.Value2);
 
     // Publish "incoming" data
-    int recieved = simpit->ReadIncoming();
+    int recieved = simpit.ReadIncoming();
     assertEqual(recieved, 2);
 
     // The registered custom handler above simply sets both values equal to each other.

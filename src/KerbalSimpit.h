@@ -1,7 +1,6 @@
 #ifndef KerbalSimpit_h
 #define KerbalSimpit_h
 
-#include "SimpitBuilder.h"
 #include "KerbalSimpitMessageTypeIds.h"
 #include "KerbalSimpitMessageTypes.h"
 #include "SimpitMacros.h"
