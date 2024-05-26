@@ -5,7 +5,7 @@
 #include "CoreSimpitMessageTypeIds.h"
 #include "SimpitMacros.h"
 
-#define SIMPIT_VERSION "2.4.0"
+#define SIMPIT_VERSION "3.0.1.rettoph"
 
 SIMPIT_DECLARE_OUTGOING_TYPE(EchoRequest, SIMPIT_CORE_OUTGOING_ECHO_REQUEST_ID);
 SIMPIT_DECLARE_OUTGOING_TYPE(EchoResponse, SIMPIT_CORE_OUTGOING_ECHO_RESPONSE_ID);

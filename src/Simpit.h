@@ -33,7 +33,7 @@ public:
 
     void Update();
 
-    template<typename T> Simpit& RegisterIncoming(void(*handler)(void*, T*))
+    template<typename T> Simpit& RegisterIncomingHandler(void(*handler)(void*, T*))
     {
         _messageTypes.TryRegisterIncoming<T>(handler);
         return *this;

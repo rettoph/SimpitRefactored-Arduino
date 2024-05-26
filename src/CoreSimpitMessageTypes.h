@@ -27,12 +27,42 @@ struct __attribute__((packed)) Handshake
 
 struct __attribute__((packed)) EchoRequest
 {
-    byte MessageTypeIds[SIMPIT_CORE_MESSAGE_TYPE_BUFFER_SIZE];
+    static constexpr byte NullChar = '\0';
+
+    byte Data[SIMPIT_CORE_MESSAGE_TYPE_BUFFER_SIZE];
+
+    void Write(String value)
+    {
+        value += NullChar;
+        for(int i = 0; i < min(value.length(), SIMPIT_CORE_MESSAGE_TYPE_BUFFER_SIZE); i++)
+        {
+            this->Data[i] = value[i];
+        }
+    }
 };
 
 struct __attribute__((packed)) EchoResponse
 {
-    byte MessageTypeIds[SIMPIT_CORE_MESSAGE_TYPE_BUFFER_SIZE];
+    static constexpr byte NullChar = '\0';
+
+    byte Data[SIMPIT_CORE_MESSAGE_TYPE_BUFFER_SIZE];
+
+    String ReadString()
+    {
+        String value = "";
+
+        for(int i = 0; i < SIMPIT_CORE_MESSAGE_TYPE_BUFFER_SIZE; i++)
+        {
+            if(this->Data[i] == NullChar)
+            {
+                break;
+            }
+
+            value += this->Data[i];
+        }
+
+        return value;
+    }
 };
 
 struct __attribute__((packed)) CloseSerialPort

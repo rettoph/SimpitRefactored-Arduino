@@ -8,11 +8,13 @@
 
    Peter Hardy <peter@hardy.dropbear.id.au>
 */
+#include "Simpit.h"
 #include "KerbalSimpit.h"
 
 // Declare a KerbalSimpit object that will
 // communicate using the "Serial" device.
-KerbalSimpit mySimpit(Serial);
+// Allocate space for (1) message handler
+Simpit mySimpit(1, Serial);
 
 // This boolean tracks the desired LED state.
 bool state = false;
@@ -31,16 +33,16 @@ void setup() {
   digitalWrite(LED_BUILTIN, HIGH);
   // This loop continually attempts to handshake with the plugin.
   // It will keep retrying until it gets a successful handshake.
-  while (!mySimpit.init()) {
+  while (!mySimpit.Init((byte)0x37)) {
     delay(100);
   }
   // Turn off the built-in LED to indicate handshaking is complete.
   digitalWrite(LED_BUILTIN, LOW);
   // Display a message in KSP to indicate handshaking is complete.
-  mySimpit.printToKSP("Connected", PRINT_TO_SCREEN);
+  mySimpit.Log("Connected");
   // Sets our callback function. The KerbalSimpit library will
   // call this function every time a packet is received.
-  mySimpit.inboundHandler(messageHandler);
+  mySimpit.RegisterIncomingHandler<EchoResponse>(EchoResponseHandler);
 }
 
 void loop() {
@@ -49,30 +51,28 @@ void loop() {
   if (now - lastSent >= sendInterval) {
     // If the last message was "high", send "low"
     // and vice-versa.
+    EchoRequest request = EchoRequest();
+    
     if (state) {
-      mySimpit.send(ECHO_REQ_MESSAGE, "low", 4);
+      request.Write("low");
     } else {
-      mySimpit.send(ECHO_REQ_MESSAGE, "high", 5);
+      request.Write("high");
     }
     // Update when we last sent a message.
     lastSent = now;
     // Update the state variable to match the message we just sent.
     state = !state;
   }
+
   // Call the library update() function to check for new messages.
-  mySimpit.update();
+  mySimpit.Update();
 }
 
-void messageHandler(byte messageType, byte msg[], byte msgSize) {
-  // We are only interested in echo response packets.
-  if (messageType == ECHO_RESP_MESSAGE) {
-    // The message payload will be either "low" or "high".
-    // We use the strcmp function to check what the string payload
-    // is, and set the LED status accordingly.
-    if (strcmp((char*) msg, "low")) {
-      digitalWrite(LED_BUILTIN, LOW);
-    } else {
-      digitalWrite(LED_BUILTIN, HIGH);
-    }
+void EchoResponseHandler(void *sender, EchoResponse *message)
+{
+  if (message->ReadString() == "low") {
+    digitalWrite(LED_BUILTIN, LOW);
+  } else {
+    digitalWrite(LED_BUILTIN, HIGH);
   }
 }
