@@ -24,7 +24,7 @@ Simpit::Simpit(byte incomingMessageHandlerCapacity, Stream &serial) :
 {
 }
 
-bool Simpit::Init(byte response)
+bool Simpit::Init(byte &response)
 {
     // Empty the serial buffer
     _serial.Clear();
@@ -67,11 +67,8 @@ bool Simpit::Init(byte response)
     { // Not a SYNACK response
         return false;
     }
-    
-    if(handshake.Payload != response)
-    { // Incorrect handshake response
-        return false;
-    }
+
+    response = handshake.Payload;
 
     synchronisation.Type = SynchronisationMessageTypeEnum::ACK;
     _serial.TryWriteOutgoing(SIMPIT_CORE_OUTGOING_SYNCHRONISATION_ID, &synchronisation, sizeof(Synchronisation));

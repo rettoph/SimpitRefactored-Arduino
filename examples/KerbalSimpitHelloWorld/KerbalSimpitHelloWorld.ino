@@ -33,9 +33,13 @@ void setup() {
   digitalWrite(LED_BUILTIN, HIGH);
   // This loop continually attempts to handshake with the plugin.
   // It will keep retrying until it gets a successful handshake.
-  while (!mySimpit.Init((byte)0x37)) {
+  // 0x37 response value indicates KSP1
+  byte initResponse;
+  while(mySimpit.Init(initResponse) == false && initResponse != (byte)0x37)
+  {
     delay(100);
   }
+    
   // Turn off the built-in LED to indicate handshaking is complete.
   digitalWrite(LED_BUILTIN, LOW);
   // Display a message in KSP to indicate handshaking is complete.

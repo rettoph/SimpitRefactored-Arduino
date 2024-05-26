@@ -27,7 +27,7 @@ public:
       to ensure you've run `Serial.begin(115200)` (or similar) before calling
       this method.
   */
-    bool Init(byte response);
+    bool Init(byte &response);
 
     int ReadIncoming();
 
