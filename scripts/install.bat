@@ -3,10 +3,10 @@ set KerbalSimpitRevampedArduinoTargetPath="%ArduinoLibraryPath%\KerbalSimpitReva
 set FunctionObjectsTargetPath="%ArduinoLibraryPath%\function_objects"
 
 CALL :NORMALIZEPATH "%~dp0\.."
-SET KerbalSimpitRevampedArduinoSourcePath=%RETVAL%
+SET KerbalSimpitRevampedArduinoSourcePath="%RETVAL%"
 
 CALL :NORMALIZEPATH "%~dp0\..\libraries\function_objects\include"
-SET FunctionObjectsSourcePath=%RETVAL%
+SET FunctionObjectsSourcePath="%RETVAL%"
 
 if not exist %KerbalSimpitRevampedArduinoTargetPath% (
     echo Creating Arduino Library Directory at %ArduinoLibraryPath%
