@@ -27,11 +27,15 @@ if exist %FunctionObjectsTargetPath% (
 
 mklink /J %FunctionObjectsTargetPath% %FunctionObjectsSourcePath%
 
-echo Done!
 
-:: ========== FUNCTIONS ==========
-EXIT /B
+
+GOTO :END
+echo Warning: Running function code
 
 :NORMALIZEPATH
   SET RETVAL=%~f1
   EXIT /B
+
+:END
+echo Done!
+timeout /t 10
