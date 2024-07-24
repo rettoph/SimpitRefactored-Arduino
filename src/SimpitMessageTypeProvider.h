@@ -2,6 +2,23 @@
 #define SimpitMessageTypeProvider_h
 
 #include "SimpitMessageType.h"
+#include "IncomingMessageSubscriber.h"
+
+template<typename T> class LambdaIncomingMessageTypeSubscriber : public IncomingMessageSubscriber<T> {
+    private:
+        void(*_subscriber)(void*, T*);
+
+    public:
+        LambdaIncomingMessageTypeSubscriber(void(*subscriber)(void*, T*))
+        {
+            this->_subscriber = subscriber;
+        }
+
+        void Process(void *sender, T *data) override
+        {
+            this->_subscriber(sender, data);
+        };
+};
 
 class SimpitMessageTypeProvider
 {
@@ -15,9 +32,15 @@ public:
 
     bool TryGetIncomingMessageType(byte id, IncomingSimpitMessageType *&messageType, byte &index);
 
-    template<typename T> bool TryRegisterIncoming(void(*handler)(void*, T*))
+    template<typename T> bool TryRegisterIncoming(void(*subscriber)(void*, T*))
     {
-        GenericIncomingSimpitMessageType<T>* type = new GenericIncomingSimpitMessageType<T>(GenericIncomingSimpitMessageType<T>::MessageTypeId, handler);
+        IncomingMessageSubscriber<T> *incomingSubscriber = new LambdaIncomingMessageTypeSubscriber<T>(subscriber);
+        return this->TryRegisterIncoming(incomingSubscriber);
+    }
+
+    template<typename T> bool TryRegisterIncoming(IncomingMessageSubscriber<T> *subscriber)
+    {
+        GenericIncomingSimpitMessageType<T>* type = new GenericIncomingSimpitMessageType<T>(GenericIncomingSimpitMessageType<T>::MessageTypeId, subscriber);
         _incoming[_incomingCount++] = (IncomingSimpitMessageType*)type;
 
         return true;

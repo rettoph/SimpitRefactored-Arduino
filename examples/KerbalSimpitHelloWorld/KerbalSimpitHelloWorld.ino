@@ -46,7 +46,7 @@ void setup() {
   mySimpit.Log("Connected");
   // Sets our callback function. The KerbalSimpit library will
   // call this function every time a packet is received.
-  mySimpit.RegisterIncomingHandler<EchoResponse>(EchoResponseHandler);
+  mySimpit.RegisterIncomingSubscriber<EchoResponse>(EchoResponseHandler);
 }
 
 void loop() {

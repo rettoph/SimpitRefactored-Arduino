@@ -5,6 +5,7 @@
 #include "SerialPort.h"
 #include "CoreSimpitMessageTypes.h"
 #include "SimpitMessageTypeProvider.h"
+#include "IncomingMessageSubscriber.h"
 
 class Simpit
 {
@@ -33,9 +34,15 @@ public:
 
     void Update();
 
-    template<typename T> Simpit& RegisterIncomingHandler(void(*handler)(void*, T*))
+    template<typename T> Simpit& RegisterIncomingSubscriber(void(*subscriber)(void*, T*))
     {
-        _messageTypes.TryRegisterIncoming<T>(handler);
+        _messageTypes.TryRegisterIncoming<T>(subscriber);
+        return *this;
+    }
+
+    template<typename T> Simpit& RegisterIncomingSubscriber(IncomingMessageSubscriber<T> *subscriber)
+    {
+        _messageTypes.TryRegisterIncoming<T>(subscriber);
         return *this;
     }
     

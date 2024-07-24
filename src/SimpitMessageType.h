@@ -4,6 +4,7 @@
 #include <Arduino.h>
 #include "SimpitStream.h"
 #include "SerialPort.h"
+#include "IncomingMessageSubscriber.h"
 
 struct IncomingSimpitMessageType
 {
@@ -20,14 +21,14 @@ struct IncomingSimpitMessageType
 template<typename T> struct GenericIncomingSimpitMessageType : public IncomingSimpitMessageType
 {
 private:
-    void(*_handler)(void*, T*);
+    IncomingMessageSubscriber<T> *_subscriber;
 
 public:
     static const byte MessageTypeId;
 
-    GenericIncomingSimpitMessageType(byte id, void(*handler)(void*, T*)) : IncomingSimpitMessageType(id)
+    GenericIncomingSimpitMessageType(byte id, IncomingMessageSubscriber<T> *subscriber) : IncomingSimpitMessageType(id)
     {
-        _handler = handler;
+        this->_subscriber = subscriber;
 
         this->Id = id;
     }
@@ -40,7 +41,8 @@ public:
             return false;
         }
 
-        _handler(sender, &value);
+        this->_subscriber->Process(sender, &value);
+
         return true;
     }
 };
