@@ -1,4 +1,8 @@
 set ArduinoLibraryPath=%USERPROFILE%\Documents\Arduino\libraries
+
+echo Input Arduino Library Path. Default: "%ArduinoLibraryPath%"
+set /P "ArduinoLibraryPath="
+
 set KerbalSimpitRevampedArduinoTargetPath="%ArduinoLibraryPath%\KerbalSimpitRevamped-Arduino"
 set FunctionObjectsTargetPath="%ArduinoLibraryPath%\function_objects"
 
