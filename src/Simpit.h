@@ -3,7 +3,7 @@
 
 #include "SimpitMessageType.h"
 #include "SerialPort.h"
-#include "CoreSimpitMessageTypes.h"
+#include "SimpitMessageTypes.h"
 #include "SimpitMessageTypeProvider.h"
 #include "IncomingMessageSubscriber.h"
 

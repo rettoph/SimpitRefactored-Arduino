@@ -1,8 +1,8 @@
 #include "Simpit.h"
 #include "COBS.h"
 #include "CheckSum.h"
-#include "CoreSimpitMessageTypes.h"
-#include "CoreSimpitMessageTypeIds.h"
+#include "SimpitMessageTypes.h"
+#include "SimpitMessageTypeIds.h"
 #include "SimpitMacros.h"
 
 #define SIMPIT_VERSION "3.0.1.rettoph"
