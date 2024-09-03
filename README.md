@@ -10,7 +10,7 @@ Refer to the `full documentation`_ for getting started and API information.
 .. _Arduino: https://www.arduino.cc/
 .. _Kerbal Space Program: https://kerbalspaceprogram.com/
 .. _Kerbal Simpit Revamp: https://github.com/Simpit-team
-.. _full documentation: https://kerbalsimpitrevamped-arduino.readthedocs.io
+.. _full documentation: https://KerbalSimpitRefactored-arduino.readthedocs.io
 
 ### Local Debugging
 
