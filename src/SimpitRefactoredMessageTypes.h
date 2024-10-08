@@ -1,8 +1,8 @@
-#ifndef SimpitMessageTypes.h
-#define SimpitMessageTypes.h
+#ifndef SimpitRefactoredMessageTypes.h
+#define SimpitRefactoredMessageTypes.h
 
 #include "FixedString.h"
-#include "SimpitMessageTypeIds.h"
+#include "SimpitRefactoredMessageTypeIds.h"
 
 #define SIMPIT_CORE_MESSAGE_TYPE_BUFFER_SIZE 32
 

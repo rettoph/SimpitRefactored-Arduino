@@ -1,7 +1,7 @@
 #ifndef SimpitMessageTypeProvider_h
 #define SimpitMessageTypeProvider_h
 
-#include "SimpitMessageType.h"
+#include "SimpitRefactoredMessageType.h"
 #include "IncomingMessageSubscriber.h"
 
 template<typename T> class LambdaIncomingMessageTypeSubscriber : public IncomingMessageSubscriber<T> {

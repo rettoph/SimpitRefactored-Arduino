@@ -1,5 +1,5 @@
-#ifndef SimpitMessageTypeIds.h
-#define SimpitMessageTypeIds.h
+#ifndef SimpitRefactoredMessageTypeIds.h
+#define SimpitRefactoredMessageTypeIds.h
 
 #define SIMPIT_CORE_OUTGOING_SYNCHRONISATION_ID 0
 #define SIMPIT_CORE_OUTGOING_ECHO_REQUEST_ID 1

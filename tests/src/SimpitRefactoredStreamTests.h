@@ -1,6 +1,6 @@
 #include <Arduino.h>
 #include <AUnit.h>
-#include <SimpitStream.h>
+#include <SimpitRefactoredStream.h>
 #include <FixedString.h>
 
 using namespace aunit;

@@ -1,4 +1,4 @@
-#include "SimpitMessageTypeProvider.h"
+#include "SimpitRefactoredMessageTypeProvider.h"
 
 SimpitMessageTypeProvider::SimpitMessageTypeProvider(byte incomingMessageHandlerCapacity)
 {

@@ -1,7 +1,7 @@
 #ifndef CheckSum_h
 #define CheckSum_h
 
-#include "SimpitStream.h"
+#include "SimpitRefactoredStream.h"
 
 class CheckSum
 {

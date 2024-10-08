@@ -2,7 +2,7 @@
 #define SimpitMessageType_h
 
 #include <Arduino.h>
-#include "SimpitStream.h"
+#include "SimpitRefactoredStream.h"
 #include "SerialPort.h"
 #include "IncomingMessageSubscriber.h"
 

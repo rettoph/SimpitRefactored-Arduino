@@ -1,11 +1,11 @@
 #include <Arduino.h>
 #include <AUnit.h>
-#include <SimpitMessageType.h>
-#include <SimpitMacros.h>
+#include <SimpitRefactoredMessageType.h>
+#include <SimpitRefactoredMacros.h>
 #include <CheckSum.h>
 #include <COBS.h>
 #include <MemStream.h>
-#include <KerbalSimpit.h>
+#include <KerbalSimpitRefactored.h>
 
 using namespace aunit;
 

@@ -2,11 +2,11 @@
 #include <AUnit.h>
 
 #include "src/FixedStringTests.h"
-#include "src/SimpitStreamTests.h"
+#include "src/SimpitRefactoredStreamTests.h"
 #include "src/COBSTests.h"
 #include "src/CheckSumTests.h"
 #include "src/SerialPortTests.h"
-#include "src/SimpitTests.h"
+#include "src/SimpitRefactoredTests.h"
 
 using namespace aunit;
 

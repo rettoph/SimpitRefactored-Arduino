@@ -2,7 +2,7 @@
 #define COBS_h
 
 #include <Arduino.h>
-#include "SimpitStream.h"
+#include "SimpitRefactoredStream.h"
 
 class COBS
 {

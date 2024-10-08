@@ -1,10 +1,10 @@
 #ifndef Simpit_h
 #define Simpit_h
 
-#include "SimpitMessageType.h"
+#include "SimpitRefactoredMessageType.h"
 #include "SerialPort.h"
-#include "SimpitMessageTypes.h"
-#include "SimpitMessageTypeProvider.h"
+#include "SimpitRefactoredMessageTypes.h"
+#include "SimpitRefactoredMessageTypeProvider.h"
 #include "IncomingMessageSubscriber.h"
 
 class Simpit
